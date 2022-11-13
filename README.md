@@ -3,7 +3,7 @@
 
 ##### Seneca College ***WEB322 Assignment 5***
 
-##### Created using `HTML/CSS`, `Javascript`, `Handlebars`
+##### Created using `HTML/CSS (Bootstrap 5.2)`, `Javascript`, `Handlebars`
 
 ##### User administrator access via `MongoDB` & `Express-session`
 
