@@ -29,7 +29,7 @@ Todo
 
 Change Log
 ==========
-11/11/22 - Assignment 4 complete
-11/13/22 - Started Assignment 5
+11/11/22 - Assignment 4 complete ✅
+11/13/22 - Started Assignment 5 ✅
 ```
 
