@@ -13,6 +13,19 @@
 Todo 
 ==========
 ==> Implement `Express-session`
+==> Articles filter by categories
+---------------------------------
+==> Allow `isAdmin` user to:
+==>   Add/remove articles
+==>   Edit any articles
+==>   Change the article's image
+==>     Article image can only be an image
+==>     Such as (.jpg, .jpeg, .png, .gif)
+--------------------------------
+==> Logged in user to be able to change:
+==>   Username, fullname, profile picture
+==> Forgot password (for now just ask user 2+2)
+
 
 Change Log
 ==========
