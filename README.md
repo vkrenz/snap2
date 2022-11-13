@@ -18,7 +18,7 @@ Todo
 ==> Allow `isAdmin` user to:
 ==>   Add/remove articles
 ==>   Edit any articles
-==>   Change the article's image
+==>   Change the article's image...
 ==>     Article image can only be an image
 ==>     Such as (.jpg, .jpeg, .png, .gif)
 --------------------------------
