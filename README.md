@@ -29,13 +29,15 @@ Todo
 ==>     Such as (.jpg, .jpeg, .png, .gif)
 --------------------------------
 ==> Logged in user to be able to change:
-==>   Username, fullname, profile picture
-==>   Add a "Edit profile" button for that
+==>   Username, fullname, profile picture (user/dash/edit)
+==>   Add a "Edit profile" button for that ✅
 --------------------------------
 ==> Forgot password (for now just ask user 2+2)...
 ==>   Then promt the user to update their password.
 --------------------------------
 ==> Implement 'Remember-me"
+--------------------------------
+==> Implement a register 'Upload Image (jpeg/jpg/png)
 
 
 Change Log
