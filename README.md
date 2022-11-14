@@ -18,6 +18,7 @@ Todo
 ==>   Right most of the navbar ✅
 ==>   Replace 'login' link with user drop down options ✅
 ==>   Remove the 'register' link ✅
+==>   Logout link (under user dropdown) will logout user and redirect to /home
 ---------------------------------
 ==> Articles filter by categories
 ---------------------------------
@@ -27,6 +28,7 @@ Todo
 ==>   Change the article's image...
 ==>     Article image can only be an image
 ==>     Such as (.jpg, .jpeg, .png, .gif)
+==> Admin user will display 'Admin' on user dashboard ✅
 --------------------------------
 ==> Logged in user to be able to change:
 ==>   Username, fullname, profile picture (user/dash/edit)
@@ -48,5 +50,6 @@ Change Log
 11/14/22 - Changed 'Users-Test' => 'Users' in const User (user.js)
 11/14/22 - If user is not logged when accessing their dashboard it will redirect to login
 11/14/22 - User dashboard navbar now has user drop down options rather than 'login/register' links
+11/14/22 - Admin user displays 'Admin' (red) on user dashboard
 ```
 

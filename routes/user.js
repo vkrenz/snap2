@@ -238,6 +238,15 @@ const renderRegisterPageErr = (res, Err, err, username, email, password, confirm
 // const userCount = Object.keys(User.countDocuments({})).length
 // console.log(userCount)
 
+router.post('/auth/logout', (req, res) => {
+    if(req.session.userLoggedIn) {
+        req.session.userLoggedIn = false
+        res.redirect('/home')
+    }else{
+        res.redirect('/login')
+    }
+})
+
 router.get('/login', (req, res) => {
     User.countDocuments({/** All documents */}, (err, count) => {
         if(err) {
@@ -258,10 +267,6 @@ router.get('/login/:username', (req, res) => {
         layout: false,
         passedUsername: passedUsername
     })
-})
-
-router.post('/auth/logout', (req, res) => {
-
 })
 
 /**
@@ -296,6 +301,7 @@ router.post('/auth/login', loginValidationRules, (req, res) => {
                 if(password == user.password) {
                     console.log('Password matches! :D')
                     req.session.userLoggedIn = true
+                    req.session.isAdmin = user.userType == 'admin' ? true : false
                     res.redirect(`/user/dash/${username}`)
                 }else{
                     console.log('Password doesn\'t match :(')
@@ -377,7 +383,8 @@ router.get('/dash/:username', (req, res) => {
                             companyName: user.companyName,
                             country: user.country,
                             city: user.city,
-                            postalCode: user.postalCode
+                            postalCode: user.postalCode,
+                            isAdmin: req.session.isAdmin
                         })
                     }
                 }
