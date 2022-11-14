@@ -14,9 +14,10 @@ Todo
 ==========
 ==> Implement `Express-session` ✅
 ==> If a user if logged in then:
-==>   Display user pfp and usename in navbar
-==>   Right most of the navbar
-==>   Put the "log out" button as a dropdown (large screen)
+==>   Display user pfp and usename in navbar ✅
+==>   Right most of the navbar ✅
+==>   Replace 'login' link with user drop down options ✅
+==>   Remove the 'register' link ✅
 ---------------------------------
 ==> Articles filter by categories
 ---------------------------------
@@ -34,6 +35,7 @@ Todo
 ==> Forgot password (for now just ask user 2+2)...
 ==>   Then promt the user to update their password.
 --------------------------------
+==> Implement 'Remember-me"
 
 
 Change Log
@@ -41,6 +43,8 @@ Change Log
 11/11/22 - Assignment 4 complete
 11/13/22 - Started Assignment 5
 11/14/22 - Moved: express-sessions & body-parser to server.js from user.js
-11/14/22 - Added a 'isLoggedIn' property to userDB - true by default
+11/14/22 - Changed 'Users-Test' => 'Users' in const User (user.js)
+11/14/22 - If user is not logged when accessing their dashboard it will redirect to login
+11/14/22 - User dashboard navbar now has user drop down options rather than 'login/register' links
 ```
 

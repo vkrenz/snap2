@@ -17,12 +17,7 @@ mongoose.connect(url)
 const defaultPFPURL = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
 
 // MongoDB - Define User Schema
-// TODO: Change 'Users_Test' ==> 'Users'
 const User = mongoose.model("users", new mongoose.Schema({
-    "isLoggedIn": {
-        "type": Boolean,
-        "default": true
-    },
     "createdAt": {
         "type": Date,
         "default": new Date().toLocaleString(),
@@ -67,7 +62,7 @@ User.exists({username: "admin-vkrenzel"}, (err, user) => {
     if(err) {
         console.log(err)
     } else {
-        console.log(user)
+        console.log('[Exists] Admin User:', user)
         if(!user) {
             // Create admin user
             console.log("Admin User not found! Creating one...")
@@ -259,16 +254,9 @@ router.get('/login', (req, res) => {
 router.get('/login/:username', (req, res) => {
     const passedUsername = req.params.username
     console.log(passedUsername)
-    User.countDocuments({/** All Documents */}, (err, count) => {
-        if(err) {
-            console.log(err)
-        }else{
-            res.render('login', {
-                layout: false,
-                passedUsername: passedUsername,
-                count: count
-            })
-        }
+    res.render('login', {
+        layout: false,
+        passedUsername: passedUsername
     })
 })
 
@@ -307,6 +295,7 @@ router.post('/auth/login', loginValidationRules, (req, res) => {
                 // Validate if password matches...
                 if(password == user.password) {
                     console.log('Password matches! :D')
+                    req.session.userLoggedIn = true
                     res.redirect(`/user/dash/${username}`)
                 }else{
                     console.log('Password doesn\'t match :(')
@@ -373,18 +362,24 @@ router.get('/dash/:username', (req, res) => {
                         err: err
                     })
                 }else{
-                    res.render('dash', { 
-                        layout: false ,
-                        username: user.username,
-                        email: user.email,
-                        fullName: user.fullName,
-                        pfpURL: user.pfpURL,
-                        phoneNumber: user.phoneNumber,
-                        companyName: user.companyName,
-                        country: user.country,
-                        city: user.city,
-                        postalCode: user.postalCode
-                    })
+                    req.session.isLoggedIn = user.isLoggedIn
+                    if(!req.session.userLoggedIn) {
+                        console.log("USER IS NOT LOGGED IN!!! GO LOGIN PLS :D")
+                        res.redirect(`/user/login/${username}`)
+                    }else{
+                        res.render('dash', { 
+                            layout: false ,
+                            username: user.username,
+                            email: user.email,
+                            fullName: user.fullName,
+                            pfpURL: user.pfpURL,
+                            phoneNumber: user.phoneNumber,
+                            companyName: user.companyName,
+                            country: user.country,
+                            city: user.city,
+                            postalCode: user.postalCode
+                        })
+                    }
                 }
             })
         }

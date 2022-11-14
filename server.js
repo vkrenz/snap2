@@ -31,7 +31,8 @@ const session = require('express-session')
 app.use(session({
     secret: 'senecacollege-web322',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {}
 }))
 
 // Parser settings

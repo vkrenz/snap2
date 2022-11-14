@@ -37,7 +37,7 @@ Blog.exists({blogID: 1}, (err, entry) => {
     if(err) {
         console.log(err)
     }else{
-        console.log(entry)
+        console.log('[Exists] Test Blog Entry:', entry)
         if(!entry) {
             console.log("Test Blog Entry not found! Creating one...")
             const testBlogEntry = new Blog({

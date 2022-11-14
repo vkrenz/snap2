@@ -39,8 +39,11 @@
 }
 
 .crop img {
-    height: 100%;
-    width: auto;
+    width: 200px;
+    height: auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .name-container {

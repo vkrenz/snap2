@@ -17,6 +17,11 @@
     color: var(--primary-color) !important;
 }
 
+.dropdown-item.active {
+    color: var(--primary-color) !important;
+    background-color: white;
+}
+
 .navbar strong {
     color: var(--primary-color)
 }
@@ -25,7 +30,9 @@
     color: var(--primary-color);
     border-radius: 25px;
     padding: 5px 15px;
+    padding-bottom: 7px;
 }
+
 
 .login-btn:hover {
     background-color: var(--primary-color);   
@@ -61,6 +68,23 @@
     color: var(--primary-color);
     transform: rotate(-45deg);
     transition: 0.2s all ease-in;
+}
+
+.navbar-crop {
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-crop img {
+    width: 25px;
+    height: auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 /** Override Bootstrap @media */
