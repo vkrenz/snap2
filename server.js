@@ -14,26 +14,30 @@ const app = express()
 
 // General Imports
 const hbs = require('express-handlebars')
-const session = require('express-session')
-const cookieParser = require('cookie-parser')
-const cors = require('cors')
 const path = require('path')
-// const multer = require('multer')
 
+// Not important RN (for later use)
+// const multer = require('multer')
+// const cookieParser = require('cookie-parser')
+// const cors = require('cors')
 
 // General app settings
 const favicon = require('serve-favicon')
 app.use(favicon(path.join(__dirname, 'public', 'img', 'favicon.ico')))
 app.use(express.static(path.join(__dirname, 'public')))
+
+// Express Session Settings
+const session = require('express-session')
 app.use(session({
-    secret: 'webhost322',
-    saveUninitialized: false,
-    resave: false
+    secret: 'senecacollege-web322',
+    resave: false,
+    saveUninitialized: false
 }))
 
 // Parser settings
-app.use(cors())
-app.use(cookieParser())
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 // User Router Import
 const user = require('./routes/user')
@@ -56,12 +60,7 @@ app.engine('hbs', hbs.engine({
     layoutDir: __dirname + '/views/pages',
     partialsDir: __dirname + '/views/partials'
     // helpers: {
-    //     'times': function(n, block) {
-    //         var accum = '';
-    //         for(var i = 0; i < n; ++i)
-    //             accum += block.fn(i);
-    //         return accum;
-    //     }
+    //
     // }
 }))
 

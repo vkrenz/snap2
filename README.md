@@ -12,7 +12,7 @@
 ```
 Todo 
 ==========
-==> Implement `Express-session`
+==> Implement `Express-session` ✅
 ==> If a user if logged in then:
 ==>   Display user pfp and usename in navbar
 ==>   Right most of the navbar
@@ -40,5 +40,7 @@ Change Log
 ==========
 11/11/22 - Assignment 4 complete
 11/13/22 - Started Assignment 5
+11/14/22 - Moved: express-sessions & body-parser to server.js from user.js
+11/14/22 - Added a 'isLoggedIn' property to userDB - true by default
 ```
 

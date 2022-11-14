@@ -10,20 +10,6 @@
 
 const router = require('express').Router()
 
-// Body Parser settings
-const bodyParser = require('body-parser')
-router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({extended: true}))
-
-// Express-session settings
-const session = require('express-session')
-router.use(session({
-    secret: 'web322-senecacollege-ca',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60000 }
-}))
-
 // Mongo DB Settings
 const mongoose = require('mongoose')
 const url = "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322"
@@ -32,7 +18,11 @@ const defaultPFPURL = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_Ldbmh
 
 // MongoDB - Define User Schema
 // TODO: Change 'Users_Test' ==> 'Users'
-const User = mongoose.model("Users_Test", new mongoose.Schema({
+const User = mongoose.model("users", new mongoose.Schema({
+    "isLoggedIn": {
+        "type": Boolean,
+        "default": true
+    },
     "createdAt": {
         "type": Date,
         "default": new Date().toLocaleString(),
@@ -280,6 +270,10 @@ router.get('/login/:username', (req, res) => {
             })
         }
     })
+})
+
+router.post('/auth/logout', (req, res) => {
+
 })
 
 /**
