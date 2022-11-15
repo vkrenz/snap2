@@ -34,6 +34,7 @@ const User = mongoose.model("users", new mongoose.Schema({
     "email": {
         "type": String,
         "required": true,
+        "unique": true
     },
     "password": {
         "type": String,
@@ -69,7 +70,7 @@ User.exists({username: "admin-vkrenzel"}, (err, user) => {
             const adminUser = new User({
                 userType: "admin",
                 username: "admin-vkrenzel",
-                email: "vkrenzel@outlook.com",
+                email: "admin@senecacollege.ca",
                 password: "admin",
                 fullName: "Victor Krenzel",
                 phoneNumber: "1112223333",
@@ -234,30 +235,20 @@ const renderRegisterPageErr = (res, Err, err, username, email, password, confirm
     })
 }
 
-// Doesn't work :(
-// const userCount = Object.keys(User.countDocuments({})).length
-// console.log(userCount)
-
-router.post('/auth/logout', (req, res) => {
-    if(req.session.userLoggedIn) {
-        req.session.userLoggedIn = false
-        res.redirect('/home')
-    }else{
-        res.redirect('/login')
-    }
-})
-
 router.get('/login', (req, res) => {
-    User.countDocuments({/** All documents */}, (err, count) => {
-        if(err) {
-            console.log(err)
-        }else{
+    var error = req.query.error
+    if(error) {
+        if(error == 1) {
             res.render('login', {
                 layout: false,
-                count: count
+                Err: '<strong>You need to login to view this content.</strong> Please log in.'
             })
         }
-    })
+    }else{
+        res.render('login', {
+            layout: false,
+        })       
+    }
 })
 
 router.get('/login/:username', (req, res) => {
@@ -267,6 +258,20 @@ router.get('/login/:username', (req, res) => {
         layout: false,
         passedUsername: passedUsername
     })
+})
+
+router.delete('/logout', (req, res) => {
+    if(req.session) {
+        req.session.destroy(err => {
+            if(err) {
+                res.status(400).send('Unable to logout')
+            }else{
+                res.send('Logout successful')
+            }
+        })
+    }else{
+        res.end()
+    }
 })
 
 /**
@@ -301,6 +306,8 @@ router.post('/auth/login', loginValidationRules, (req, res) => {
                 if(password == user.password) {
                     console.log('Password matches! :D')
                     req.session.userLoggedIn = true
+                    // Pass user data to req.session
+                    req.session.user = user
                     req.session.isAdmin = user.userType == 'admin' ? true : false
                     res.redirect(`/user/dash/${username}`)
                 }else{
@@ -347,7 +354,6 @@ const renderLoginPage = (res, err, username, password) => {
  */
 
 router.get('/dash/:username', (req, res) => {
-    // const genericCoverPhotoPATH = 'img/genericCoverPhoto'
     const username = req.params.username
     User.exists({username: username}, (err, user) => {
         if(err) {
@@ -368,10 +374,9 @@ router.get('/dash/:username', (req, res) => {
                         err: err
                     })
                 }else{
-                    req.session.isLoggedIn = user.isLoggedIn
                     if(!req.session.userLoggedIn) {
-                        console.log("USER IS NOT LOGGED IN!!! GO LOGIN PLS :D")
-                        res.redirect(`/user/login/${username}`)
+                        console.log('[Dash]: User not logged in', req.session.userLoggedIn)
+                        res.redirect('/user/login?error=' + 1)
                     }else{
                         res.render('dash', { 
                             layout: false ,

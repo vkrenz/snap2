@@ -33,6 +33,28 @@
     padding-bottom: 7px;
 }
 
+.user-btn,
+.user-btn:hover {
+    color: var(--primary-color);  
+    border: none;
+    border-radius: 25px;
+    padding: 5px 15px;
+    padding-bottom: 7px;
+    border: 1px solid white;
+    transition: 0.3s all ease-out;
+}
+
+.user-btn:hover {
+    border: 1px solid var(--primary-color);
+    background-color: white;
+    transition: 0.3s all ease-in;
+}
+
+.user-btn.show {
+    background-color: var(--primary-color) !important;
+    border: 1px solid var(--primary-color) !important;
+    color: white;
+}
 
 .login-btn:hover {
     background-color: var(--primary-color);   

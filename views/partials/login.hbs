@@ -56,22 +56,24 @@
     <form action="/user/auth/login" method="post" class="form-signin p-sm-5 shadow-lg">
         {{#if err}}
             {{#each err}}
-                <div class="alert alert-warning mt-3" id="err" role="alert">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     {{this.msg}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {{/each}}
         {{/if}}
         {{#if Err}}
-            <div class="alert alert-warning mt-3" id="Err" role="alert">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 {{{Err}}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {{/if}}
         <h2 class="text-center text-muted m-5">LOGIN</h2>
         <div class="mb-3">
             <label for="username" class="form-label text-muted">Username</label>
-            <input type="text" class="form-control" name="username" {{#if passedUsername}}value="{{passedUsername}}"{{/if}} placeholder="jdoe">
+            <input type="text" class="form-control" name="username" {{#if passedUsername}}value="{{passedUsername}}"{{/if}}{{#if email}}value="{{passedEmail}}"{{/if}} placeholder="jdoe">
             <div class="invalid-feedback">
-                Please enter your username.
+                Please enter your username or email.
             </div>
         </div>
         <div class="mb-3">

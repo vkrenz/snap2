@@ -40,6 +40,8 @@ Todo
 ==> Implement 'Remember-me"
 --------------------------------
 ==> Implement a register 'Upload Image (jpeg/jpg/png)
+--------------------------------
+==> Allow users to sign in with username or email
 
 
 Change Log
@@ -51,5 +53,6 @@ Change Log
 11/14/22 - If user is not logged when accessing their dashboard it will redirect to login
 11/14/22 - User dashboard navbar now has user drop down options rather than 'login/register' links
 11/14/22 - Admin user displays 'Admin' (red) on user dashboard
+11/15/22 - Index now shows logged in user info on navbar
 ```
 

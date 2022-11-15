@@ -23,7 +23,10 @@
 }
 
 #user-background {
-    background-color: #313131;
+    background-image: url('/img/genericCoverPhoto.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     height: 250px;
     margin-top: 97px;
 }

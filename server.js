@@ -32,7 +32,10 @@ app.use(session({
     secret: 'senecacollege-web322',
     resave: false,
     saveUninitialized: false,
-    cookie: {}
+    cookie: {
+        // secure: true,
+        maxAge: 10 * 60000 // <== 10 Mins
+    }
 }))
 
 // Parser settings
@@ -69,7 +72,16 @@ app.engine('hbs', hbs.engine({
 app.get('/', (req, res) => res.redirect('/home'))
 
 app.get('/home', (req, res) => {
-    res.render('index', { layout: false })
+    if(req.session.userLoggedIn) {
+        console.log("User is logged in")
+        res.render('index', {
+            layout: false,
+            username: req.session.user.username
+        })
+    }else{
+        console.log("User is not logged in")
+        res.render('index', { layout: false })
+    }
 })
 
 // Define PORT
