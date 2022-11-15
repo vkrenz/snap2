@@ -54,5 +54,6 @@ Change Log
 11/14/22 - User dashboard navbar now has user drop down options rather than 'login/register' links
 11/14/22 - Admin user displays 'Admin' (red) on user dashboard
 11/15/22 - Index now shows logged in user info on navbar
+11/15/22 - Added control buttons to index carousel
 ```
 
