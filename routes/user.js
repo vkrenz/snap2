@@ -5,6 +5,7 @@
  * ==> user registration
  * ==> user login
  * ==> user dashboard
+ * ==> Administrator access
  * @date ❄️ November 11, 2022 ❄️
  */
 
