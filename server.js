@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 const session = require('express-session')
 app.use(session({
     secret: 'senecacollege-web322',
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     cookie: {
         // secure: true,
