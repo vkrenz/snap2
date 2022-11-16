@@ -41,7 +41,9 @@ Todo
 --------------------------------
 ==> Implement a register 'Upload Image (jpeg/jpg/png)
 --------------------------------
-==> Allow users to sign in with username or email
+==> Allow users to sign in with username or email (later)
+--------------------------------
+==> If going on any dashboard without signing in will make you sign in first.
 
 
 Change Log
