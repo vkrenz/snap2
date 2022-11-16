@@ -7,6 +7,8 @@
 
 ##### User administrator access via `MongoDB` & `Express-session`
 
+##### User image upload via `Multer`
+
 ##### Link to Cyclic App: [Snap!](https://snap2.cyclic.app)
 
 ```
