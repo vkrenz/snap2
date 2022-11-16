@@ -48,7 +48,7 @@ input.form-control:focus{
 }
 
 .form-register {
-    max-width: 800px;
+    max-width: 850px;
     margin: 0 auto;
     margin-top: 150px;
     margin-bottom: 50px;
@@ -66,9 +66,10 @@ input.form-control:focus{
 
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 768px) {
     .form-register {
         max-width: 100vw;
+        width: 100vw;
         border-radius: 0 !important;
         margin-top: 115px;
         margin-bottom: 15px;

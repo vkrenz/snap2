@@ -261,18 +261,17 @@ router.get('/login/:username', (req, res) => {
     })
 })
 
-router.delete('/logout', (req, res) => {
+router.get('/auth/logout', (req, res) => {
     if(req.session) {
         req.session.destroy(err => {
             if(err) {
-                res.status(400).send('Unable to logout')
+                console.log('Unable to logout')
             }else{
-                res.send('Logout successful')
+                console.log('Logout successful')
             }
         })
-    }else{
-        res.end()
     }
+    res.redirect('/home')
 })
 
 /**
@@ -360,13 +359,15 @@ router.get('/dash/:username', (req, res) => {
         if(err) {
             console.log(err)
             // res.send(err, ':(')
-        }else if(user == null){
-            const Err = `'<strong>${username}</strong>' does not exist. <a href="/user/register/${username}" class="alert-link">Sign Up?</a>`
-            res.render('login', {
-                layout: false,
-                Err: Err
-            })
-        }else{
+        }
+        // else if(user == null){
+        //     const Err = `'<strong>${username}</strong>' does not exist. <a href="/user/register/${username}" class="alert-link">Sign Up?</a>`
+        //     res.render('login', {
+        //         layout: false,
+        //         Err: Err
+        //     })
+        // }
+        else{
             User.findOne({username: username}, (err, user) => {
                 if(err) {
                     console.log(err)

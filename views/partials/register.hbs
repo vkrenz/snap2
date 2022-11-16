@@ -141,8 +141,12 @@
                     <div class="form-group my-2">
                         {{!-- <label class="input-group-text" for="inputGroupFile">Upload</label>
                         <input type="file" class="form-control" id="inputGroupFile"> --}}
-                        <label for="pfpURL">Upload Profile Picture (URL)</label>
-                        <input type="text" name="pfpURL" id="pfpURL" class="form-control">
+                        <label for="pfpURL">Upload Profile Picture</label>
+                        {{!-- <input type="text" name="pfpURL" id="pfpURL" class="form-control"> --}}
+                        <input type="file" class="form-control" id="uploadPFP" name="uploadPFP" accept=".jpeg, .jpg, .png, .gif">
+                        <div class="invalid-feedback">
+                            Invalid image format chosed. Image format must be only .jpeg, .jpg, .png or .gif.
+                        </div>
                     </div>
                     <button type="submit" class="btn-hover gradient my-4 shadow-lg rounded-pill" align="center">Register</button>
                     <p class="bottom-link text-muted text-left float-left">Already have an account? <a href="/user/login" style="text-decoration:none" class="link-login">Log in</a></p>

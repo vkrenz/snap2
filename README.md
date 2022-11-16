@@ -18,7 +18,7 @@ Todo
 ==>   Right most of the navbar ✅
 ==>   Replace 'login' link with user drop down options ✅
 ==>   Remove the 'register' link ✅
-==>   Logout link (under user dropdown) will logout user and redirect to /home
+==>   Logout link (under user dropdown) will logout user and redirect to /home ✅
 ---------------------------------
 ==> Articles filter by categories
 ---------------------------------
@@ -43,7 +43,7 @@ Todo
 --------------------------------
 ==> Allow users to sign in with username or email (later)
 --------------------------------
-==> If going on any dashboard without signing in will make you sign in first.
+==> If going on any dashboard without signing in will make you sign in first. ✅
 
 
 Change Log
