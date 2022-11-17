@@ -6,19 +6,29 @@
  * ==> user login
  * ==> user dashboard
  * ==> Administrator access
- * @date ❄️ November 11, 2022 ❄️
  */
 
 const router = require('express').Router()
 
+// General Settings
+const fs = require('fs')
+const path = require('path')
+require('dotenv/config')
+
 // Mongo DB Settings
 const mongoose = require('mongoose')
 const url = "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322"
-mongoose.connect(url)
-const defaultPFPURL = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+const mongooseConnection = mongoose.connect(url)
+// const defaultPFP = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+// const defaultCoverPhoto = "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
 
 // MongoDB - Define User Schema
 const User = mongoose.model("users", new mongoose.Schema({
+    "profilePhoto": String,
+    "coverPhoto": {
+        "data": Buffer,
+        "contentType": String,
+    },
     "createdAt": {
         "type": Date,
         "default": new Date().toLocaleString(),
@@ -45,14 +55,14 @@ const User = mongoose.model("users", new mongoose.Schema({
         "type": String,
         "required": true
     },
-    "pfpURL": {
-        "type": String,
-        "default": defaultPFPURL
+    "phoneNumber": {
+        "type": String, 
+        "default": "N/A"
     },
-    "phoneNumber": String, 
     "companyName": {
         "type": String,
-        "required": true
+        "required": true,
+        "default": "Krusty Krab"
     },
     "country": String,
     "city": String,
@@ -90,7 +100,11 @@ User.exists({username: "admin-vkrenzel"}, (err, user) => {
 const { check, validationResult } = require('express-validator')
 
 router.get('/', (req, res) => {
-    res.redirect('/user/login')
+    if(req.session.userLoggedIn) {
+        res.redirect(`/user/dash/${req.session.user.username}`)
+    }else{
+        res.redirect('/user/login')
+    }
 })
 
 router.get('/register', (req, res) => {
@@ -115,6 +129,19 @@ router.get('/register/:username', (req, res) => {
  * ==> Redirects to user dashboard @see /user/dash/:username
  */
 
+// Multer Settings 
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '..', 'public', 'upload'))
+    },
+    filename: (req, file, cb) => {
+        console.log('[File]:', file)
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+const upload = multer({storage: storage})
+
 const registerValidationRules = [
     check('username')
         .isLength({ min: 3})
@@ -138,39 +165,79 @@ const registerValidationRules = [
         })
 ]
 
-router.post('/auth/register', registerValidationRules, (req, res) => {
+router.post('/auth/register', 
+upload.single('profilePhoto'),
+registerValidationRules, 
+(req, res) => {
     const errors = validationResult(req)
     const err = errors.array()
-    const { username, email, password, confirm_password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode  } = req.body
-    // req.session.user = req.body
+    const { username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode  } = req.body
     if (!errors.isEmpty()) {
         console.log(errors)
-        renderRegisterPage(res, err, username, email, password, confirm_password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode)
-        console.log(`password: ${password} confirm_password: ${confirm_password}`)
+        renderRegisterPage(res, err, username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode)
+        // console.log(`password: ${password} confirm_password: ${confirm_password}`)
     }else{
         // Validate username
         if(password == username) {
             const Err = 'Password cannot match username'
             console.log(Err)
-            renderRegisterPageErr(res, Err, err, username, email, password, confirm_password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode)
+            renderRegisterPageErr(res, Err, err, username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode)
         }else{
             User.findOne({username: username}, (Err, user) => {
                 if(Err) {
                     console.log(Err)
-                    renderRegisterPageErr(res, Err, err, username, email, password, confirm_password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode)  
+                    renderRegisterPageErr(res, Err, err, username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode)  
                 }else{
                     if(user != null) {
                         console.log(`Username: ${username} already exists bro`)
                         Err = `Looks like '<strong>${username}</strong>' already exists. <a href="/user/login/${username}" class="alert-link">Log In?</a>`
                         console.log(user)
-                        renderRegisterPageErr(res, Err, err, username, email, password, confirm_password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode)        
+                        renderRegisterPageErr(res, Err, err, username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode)        
                     }else{
                         console.log(`${username} does not exist. Creating new user...`)
-                        createUser(username, email, password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode)
-                        console.log(user)
+                        const profilePhoto = {
+                            data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
+                            contentType: 'image/png'
+                        }
+                        // Create a new user in web322.users
+                        new User({
+                            profilePhoto: `/upload/${req.file.filename}`,
+                            // coverPhoto: {
+                            //     data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                            //     contentType: 'image/png'
+                            // },
+                            username: username,
+                            email: email,
+                            password: password,
+                            fullName: fullName,
+                            phoneNumber: phoneNumber ? null : phoneNumber,
+                            companyName: companyName,
+                            country: country ? null : country,
+                            city: city ? null : city,
+                            postalCode: postalCode ? null : city
+                        }).save().then(() => {
+                            console.log(`New User (${username})`)
+                        }).catch(err => {
+                            console.log(`Error: ${err}`)
+                        })
+                        const newUser = {
+                            profilePhoto: profilePhoto,
+                            username: username,
+                            email: email,
+                            password: password,
+                            fullName: fullName,
+                            phoneNumber: phoneNumber ? null : phoneNumber,
+                            companyName: companyName,
+                            country: country ? null : country,
+                            city: city ? null : city,
+                            postalCode: postalCode ? null : city
+                        }
+                        // Pass user data to req.session
+                        req.session.user = newUser
+                        // Log user in
+                        req.session.userLoggedIn = true
                         // Redirect to the dashboard
-                        res.redirect(`/user/dash/${username}`)
-                        console.log(user)  
+                        res.redirect(`/user/dash/${req.session.user.username}`)
                     }
                 }
             })
@@ -178,26 +245,7 @@ router.post('/auth/register', registerValidationRules, (req, res) => {
     }
 })
 
-const createUser = (username, email, password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode) => {
-    new User({
-        username: username,
-        email: email,
-        password: password,
-        fullName: fullName,
-        pfpURL: pfpURL == "" ? defaultPFPURL : pfpURL,
-        phoneNumber: phoneNumber,
-        companyName: companyName,
-        country: country,
-        city: city,
-        postalCode: postalCode
-    }).save().then(() => {
-        console.log(`New User (${username})`)
-    }).catch(err => {
-        console.log(`Error: ${err}`)
-    })
-}
-
-const renderRegisterPage = (res, err, username, email, password, confirm_password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode) => {
+const renderRegisterPage = (res, err, username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode) => {
     console.log('NO ERR RENDERED')
     res.render('register', {
         layout: false,
@@ -207,7 +255,6 @@ const renderRegisterPage = (res, err, username, email, password, confirm_passwor
         password: password,
         confirm_password: confirm_password,
         fullName: fullName,
-        pfpURL: pfpURL,
         phoneNumber: phoneNumber,
         companyName: companyName,
         country: country,
@@ -216,7 +263,7 @@ const renderRegisterPage = (res, err, username, email, password, confirm_passwor
     })
 }
 
-const renderRegisterPageErr = (res, Err, err, username, email, password, confirm_password, fullName, pfpURL, phoneNumber, companyName, country, city, postalCode) => {
+const renderRegisterPageErr = (res, Err, err, username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode) => {
     console.log('ERR RENDERED')
     res.render('register', {
         layout: false,
@@ -227,7 +274,6 @@ const renderRegisterPageErr = (res, Err, err, username, email, password, confirm
         password: password,
         confirm_password: confirm_password,
         fullName: fullName,
-        pfpURL: pfpURL,
         phoneNumber: phoneNumber,
         companyName: companyName,
         country: country,
@@ -237,18 +283,22 @@ const renderRegisterPageErr = (res, Err, err, username, email, password, confirm
 }
 
 router.get('/login', (req, res) => {
-    var error = req.query.error
-    if(error) {
-        if(error == 1) {
+    if(req.session.userLoggedIn) {
+        res.redirect(`/user/dash/${req.session.user.username}`)
+    }else{
+        var error = req.query.error
+        if(error) {
+            if(error == 1) {
+                res.render('login', {
+                    layout: false,
+                    Err: '<strong>You need to login to view this content.</strong> Please log in.'
+                })
+            }
+        }else{
             res.render('login', {
                 layout: false,
-                Err: '<strong>You need to login to view this content.</strong> Please log in.'
-            })
+            })       
         }
-    }else{
-        res.render('login', {
-            layout: false,
-        })       
     }
 })
 
@@ -265,9 +315,9 @@ router.get('/auth/logout', (req, res) => {
     if(req.session) {
         req.session.destroy(err => {
             if(err) {
-                console.log('Unable to logout')
+                res.send('Unable to logout')
             }else{
-                console.log('Logout successful')
+                res.render('logout', {layout: false})
             }
         })
     }
@@ -305,6 +355,7 @@ router.post('/auth/login', loginValidationRules, (req, res) => {
                 // Validate if password matches...
                 if(password == user.password) {
                     console.log('Password matches! :D')
+                    // Log user in
                     req.session.userLoggedIn = true
                     // Pass user data to req.session
                     req.session.user = user
@@ -354,50 +405,60 @@ const renderLoginPage = (res, err, username, password) => {
  */
 
 router.get('/dash/:username', (req, res) => {
-    const username = req.params.username
-    User.exists({username: username}, (err, user) => {
-        if(err) {
-            console.log(err)
-            // res.send(err, ':(')
-        }
-        // else if(user == null){
-        //     const Err = `'<strong>${username}</strong>' does not exist. <a href="/user/register/${username}" class="alert-link">Sign Up?</a>`
-        //     res.render('login', {
-        //         layout: false,
-        //         Err: Err
-        //     })
-        // }
-        else{
-            User.findOne({username: username}, (err, user) => {
-                if(err) {
-                    console.log(err)
-                    res.render('dash', {
-                        layout: false,
-                        err: err
-                    })
-                }else{
-                    if(!req.session.userLoggedIn) {
-                        console.log('[Dash]: User not logged in', req.session.userLoggedIn)
-                        res.redirect('/user/login?error=' + 1)
+    // Do not allow random people onto your dash
+    if(req.session.userLoggedIn) {
+        const username = req.params.username
+        // Then check if the /:username user actually exists
+        User.exists({username: username}, (err, user) => {
+            if(err) {
+                console.log(err)
+                res.redirect('/user/login')
+                // res.send(err, ':(')
+            }
+            // else if(user == null){
+            //     const Err = `'<strong>${username}</strong>' does not exist. <a href="/user/register/${username}" class="alert-link">Sign Up?</a>`
+            //     res.render('login', {
+            //         layout: false,
+            //         Err: Err
+            //     })
+            // }
+            else{
+                User.findOne({username: username}, (err, user) => {
+                    if(err) {
+                        console.log(err)
+                        res.redirect('/user/login')
                     }else{
-                        res.render('dash', { 
-                            layout: false ,
-                            username: user.username,
-                            email: user.email,
-                            fullName: user.fullName,
-                            pfpURL: user.pfpURL,
-                            phoneNumber: user.phoneNumber,
-                            companyName: user.companyName,
-                            country: user.country,
-                            city: user.city,
-                            postalCode: user.postalCode,
-                            isAdmin: req.session.isAdmin
-                        })
+                        // If the /:user exists then...
+                        if(req.session.user.username == username) {
+                            // Only show the logged in user their dashboard.
+                            var fullLocation
+                            // if(user.city != null && user.country != null && user.postalCode != null) {
+                            //     fullLocation = user.city && user.country && user.postalCode ? true : false
+                            // }
+                            res.render('dash', { 
+                                layout: false ,
+                                username: user.username,
+                                email: user.email,
+                                fullName: user.fullName,
+                                profilePhoto: user.profilePhoto,
+                                phoneNumber: user.phoneNumber,
+                                companyName: user.companyName,
+                                country: user.country,
+                                city: user.city,
+                                postalCode: user.postalCode,
+                                isAdmin: req.session.isAdmin,
+                                fullLocation: fullLocation
+                            })
+                        }else{
+                            res.redirect(`/user/dash/${req.session.user.username}`)
+                        }
                     }
-                }
-            })
-        }
-    })
+                })
+            }
+        })
+    }else{
+        res.redirect('/user/login')
+    }
 })
 
-module.exports = router
+module.exports = router, mongooseConnection

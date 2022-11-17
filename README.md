@@ -21,6 +21,7 @@ Todo
 ==>   Replace 'login' link with user drop down options ✅
 ==>   Remove the 'register' link ✅
 ==>   Logout link (under user dropdown) will logout user and redirect to /home ✅
+==>   Cannot go to /user/login it will redirect to /user/dash/:username ✅
 ---------------------------------
 ==> Articles filter by categories
 ---------------------------------
@@ -41,7 +42,8 @@ Todo
 --------------------------------
 ==> Implement 'Remember-me"
 --------------------------------
-==> Implement a register 'Upload Image (jpeg/jpg/png)
+==> Implement a register 'Upload Image' (Multer) ✅
+==> Be able to store and retreive it from mongo ✅
 --------------------------------
 ==> Allow users to sign in with username or email (later)
 --------------------------------
@@ -59,5 +61,8 @@ Change Log
 11/14/22 - Admin user displays 'Admin' (red) on user dashboard
 11/15/22 - Index now shows logged in user info on navbar
 11/15/22 - Added control buttons to index carousel
+11/17/22 - Cannot go to /user/login it will redirect to /user/dash/:username
+11/17/22 - Implement a register 'Upload Image' (Multer)
+
 ```
 

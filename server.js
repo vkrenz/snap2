@@ -5,7 +5,6 @@
 * ==> The main server file for the app
 * ==> Handles the main route (/home)
 * ==> Handles all the general app settings
-* @date ❄️ November 11, 2022 ❄️
 */
 
 // Express settings
@@ -17,7 +16,6 @@ const hbs = require('express-handlebars')
 const path = require('path')
 
 // Not important RN (for later use)
-// const multer = require('multer')
 // const cookieParser = require('cookie-parser')
 // const cors = require('cors')
 
@@ -28,13 +26,22 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // Express Session Settings
 const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+const store = new MongoDBStore({
+    uri: "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322",
+    collection: "sessions"
+})
+
 app.use(session({
     secret: 'senecacollege-web322',
     resave: true,
-    saveUninitialized: false,
+    rolling: true,
+    saveUninitialized: true,
+    store: store,
     cookie: {
-        // secure: true,
-        maxAge: 10 * 60000 // <== 10 Mins
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 7 // <== 1 Week
     }
 }))
 
@@ -54,6 +61,9 @@ app.use('/articles', articles)
 // Blog Router Import
 const blog = require('./routes/blog')
 app.use('/blog', blog)
+
+// Statis Folder
+app.use(express.static("./public/"));
 
 // View Engine Setup
 app.set('view engine', '.hbs')
@@ -84,8 +94,21 @@ app.get('/home', (req, res) => {
     }
 })
 
-// Define PORT
+// Error handlers
+app.use(function fourOhFourHandler (req, res) {
+    res.status(404).send()
+  })
+app.use(function fiveHundredHandler (err, req, res, next) {
+    console.error(err)
+    res.status(500).send()
+})
+
+// Start server
 const PORT = process.env.PORT || 8080
 const date = new Date().toLocaleString()
-const onStart = port => console.log(`[${date}] Connected on localhost:${port}`)
-app.listen(PORT, onStart(PORT))
+app.listen(PORT, function (err) {
+    if (err) {
+      return console.error(err)
+    }
+    console.log(`[${date}] Connected on localhost:${PORT}`)
+  })
