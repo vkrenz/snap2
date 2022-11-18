@@ -76,13 +76,22 @@ router.get('/', (req, res) =>{
                 category: entry.category,
                 isHero: entry.isHero,
                 content: entry.content
+
             }))
             // Then
             // entriesArr.forEach(entry => console.log(entry.name))
-            res.render('blog', {
-                layout: false,
-                entries: entriesArr,
-            })
+            if(req.session.userLoggedIn) {
+                res.render('blog', {
+                    layout: false,
+                    entries: entriesArr,
+                    username: req.session.user.username
+                })
+            }else{
+                res.render('blog', {
+                    layout: false,
+                    entries: entriesArr
+                })              
+            }
         }
     })  
 })

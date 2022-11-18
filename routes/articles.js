@@ -83,10 +83,18 @@ router.get('/', (req, res) =>{
                 articleImgURL: article.articleImgURL
             }))
             // Then
-            res.render('articles', {
-                layout: false,
-                articles: articlesArr,
-            })
+            if(req.session.userLoggedIn) {
+                res.render('articles', {
+                    layout: false,
+                    articles: articlesArr,
+                    username: req.session.user.username
+                })
+            }else{
+                res.render('articles', {
+                    layout: false,
+                    articles: articlesArr
+                })    
+            }
         }
     })  
 })
@@ -106,13 +114,25 @@ router.get('/read/:articleID', (req, res) =>{
             for(var i = 0; i < maxStars; i++) {
                 stars += '<i class="fa-regular fa-star"></i>'
             }
-            res.render('read', {
-                layout: false,
-                name: article.name,
-                author: article.author,
-                rating: stars,
-                content: article.content
-            })
+            if(req.session.userLoggedIn) {
+                res.render('read', {
+                    layout: false,
+                    name: article.name,
+                    author: article.author,
+                    rating: stars,
+                    content: article.content,
+                    username: req.session.user.username
+                })
+            }else{
+                res.render('read', {
+                    layout: false,
+                    name: article.name,
+                    author: article.author,
+                    rating: stars,
+                    content: article.content
+                })
+
+            }
         }
     }) 
 })

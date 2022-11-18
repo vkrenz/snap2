@@ -53,9 +53,10 @@
 {{!-- Navbar End --}}
 
 <div class="container-fluid d-flex justify-content-center align-items-center" id="gradient-background">
-    <div class="col-6 bg-light mx-auto">
-        Logged Out Successfully.
-    </div>
+    <form action="/user/auth/login" method="post" class="form-signin p-sm-5 shadow-lg">
+        <h3 class="display-6 text-center">Logged Out Successfully</h3>
+        <a href="/home">        <button type="submit" class="btn-hover gradient my-5 shadow-lg" align="center">Return to Home</button></a>
+    </form>
 </div>
 
 {{!-- Footer Start --}}

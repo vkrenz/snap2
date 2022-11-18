@@ -3,10 +3,28 @@
     --secondary-color: #2c3e50;
 }
 
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+body {
+    overflow-x: hidden;
+}
+
 #navbar {
-    /* height: 100px; */
+    height: 100px;
     top: 0;
-    transition: top 0.3s;
+    transition: all 0.3s ease-in-out;
 }
 
 .nav-link {
@@ -38,10 +56,14 @@
     color: var(--primary-color);  
     border: none;
     border-radius: 25px;
-    padding: 5px 15px;
+    /* padding: 5px 15px; */
     padding-bottom: 7px;
     border: 1px solid white;
     transition: 0.3s all ease-out;
+}
+
+.user-btn {
+    color: #999999;
 }
 
 .user-btn:hover {

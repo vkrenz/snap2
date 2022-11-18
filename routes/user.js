@@ -316,13 +316,17 @@ router.get('/auth/logout', (req, res) => {
         req.session.destroy(err => {
             if(err) {
                 res.send('Unable to logout')
-            }else{
-                res.render('logout', {layout: false})
             }
         })
     }
-    res.redirect('/home')
+    //Then...
+    res.redirect('/user/auth/logout?status=success')
 })
+
+router.get('/auth/logout?status=success', (req, res) => {
+    console.log("Logged Out")
+    res.render('logout', {layout: false})
+}) 
 
 /**
  * @function ROUTER-POST-LOGIN
@@ -404,6 +408,14 @@ const renderLoginPage = (res, err, username, password) => {
  * ==> Render a user-specific dashboard page
  */
 
+router.get('/dash', (req, res) => {
+    if(req.session.userLoggedIn) {
+        res.redirect(`/user/dash/${req.session.user.username}`)
+    }else{
+        res.redirect('/user/login')
+    }
+})
+
 router.get('/dash/:username', (req, res) => {
     // Do not allow random people onto your dash
     if(req.session.userLoggedIn) {
@@ -432,9 +444,7 @@ router.get('/dash/:username', (req, res) => {
                         if(req.session.user.username == username) {
                             // Only show the logged in user their dashboard.
                             var fullLocation
-                            // if(user.city != null && user.country != null && user.postalCode != null) {
-                            //     fullLocation = user.city && user.country && user.postalCode ? true : false
-                            // }
+
                             res.render('dash', { 
                                 layout: false ,
                                 username: user.username,

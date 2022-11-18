@@ -92,7 +92,6 @@
     </nav>
     {{!-- Navbar End --}}
 {{/if}}
-
 {{!-- Header Start --}}
 <div class="background parallax" id="gradient-background">
     <div class="header-cont container d-flex justify-content-center align-items-center flex-column">
@@ -102,7 +101,6 @@
     </div>
 </div>
 {{!-- Header End --}}
-
 <div class="container">
 {{!-- Services Section --}}
 <div class="services">
@@ -149,7 +147,6 @@
 </div>
 {{!-- Services Section End --}}
 </div>
-
 {{!-- Carousel --}}
 <div id="carouselExampleCaptions" class="carousel slide d-none d-md-block" data-bs-ride="false">
   <div class="carousel-indicators">
@@ -223,7 +220,6 @@
   </button>
 </div>
 {{!-- Carousel End --}}
-
 <div class="container-fluid plans-bg">
 <div class="container plans-bg">
 {{!-- Plans Start --}}
@@ -298,44 +294,88 @@
 {{!-- Plans End --}}
 </div>
 </div>
-
-{{!-- Footer Start --}}
-<ul class="nav d-flex justify-content-center align-items-center flex-column shadow-lg">
-    <div class="nav-links d-flex my-5">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/home">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/blog">Blog</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/articles">Articles</a>
-        </li>
+{{#if username}}
+    {{!-- Footer Start --}}
+    <ul class="nav d-flex justify-content-center align-items-center flex-column shadow-lg">
+        <div class="nav-links d-flex my-5">
             <li class="nav-item">
-            <a class="nav-link" href="/user/register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/user/login">Login</a>
-        </li>
-    </div>
-    <div class="footer">
-        <div class="div mx-auto mb-5" style="width:50px;height:1px;background-color:rgba(0, 0, 0, 0.25);"></div>
-        <p>🔥 Created <strong>by</strong> Victor Krenzel. &copy; <em class="text-danger">2022</em> 🔥</p>
-        <div class="socials col-auto p-4 text-center">
-            <a href="https://github.com/vkrenz" target="_blank">
-                <i class="fa-brands fa-github fa-lg px-2"></i>
-            </a>
-            <a href="https://codepen.io/vkrenzel" target="_blank">
-                <i class="fa-brands fa-codepen fa-lg px-2"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/vkrenz/" target="_blank">
-                <i class="fa-brands fa-linkedin fa-lg px-2"></i>
-            </a>
-            
+                <a class="nav-link active" aria-current="page" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/blog">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/articles">Articles</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="btn btn-outline-primary btn-md mx-2 dropdown-toggle user-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{username}}
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/user/dash/{{username}}">Dashboard</a></li>
+                    <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/user/auth/logout">Log Out</a></li>
+                </ul>
+            </li>
         </div>
-    </div>
-</ul>
-{{!-- Footer End --}}
+        <div class="footer">
+            <div class="div mx-auto mb-5" style="width:50px;height:1px;background-color:rgba(0, 0, 0, 0.25);"></div>
+            <p>🔥 Created <strong>by</strong> Victor Krenzel. &copy; <em class="text-danger">2022</em> 🔥</p>
+            <div class="socials col-auto p-4 text-center">
+                <a href="https://github.com/vkrenz" target="_blank">
+                    <i class="fa-brands fa-github fa-lg px-2"></i>
+                </a>
+                <a href="https://codepen.io/vkrenzel" target="_blank">
+                    <i class="fa-brands fa-codepen fa-lg px-2"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/vkrenz/" target="_blank">
+                    <i class="fa-brands fa-linkedin fa-lg px-2"></i>
+                </a>
+                
+            </div>
+        </div>
+    </ul>
+    {{!-- Footer End --}}
+{{else}}
+    {{!-- Footer Start --}}
+    <ul class="nav d-flex justify-content-center align-items-center flex-column shadow-lg">
+        <div class="nav-links d-flex my-5">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/blog">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/articles">Articles</a>
+            </li>
+                <li class="nav-item">
+                <a class="nav-link" href="/user/register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/login">Login</a>
+            </li>
+        </div>
+        <div class="footer">
+            <div class="div mx-auto mb-5" style="width:50px;height:1px;background-color:rgba(0, 0, 0, 0.25);"></div>
+            <p>🔥 Created <strong>by</strong> Victor Krenzel. &copy; <em class="text-danger">2022</em> 🔥</p>
+            <div class="socials col-auto p-4 text-center">
+                <a href="https://github.com/vkrenz" target="_blank">
+                    <i class="fa-brands fa-github fa-lg px-2"></i>
+                </a>
+                <a href="https://codepen.io/vkrenzel" target="_blank">
+                    <i class="fa-brands fa-codepen fa-lg px-2"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/vkrenz/" target="_blank">
+                    <i class="fa-brands fa-linkedin fa-lg px-2"></i>
+                </a>
+                
+            </div>
+        </div>
+    </ul>
+    {{!-- Footer End --}}
+{{/if}}
 
 {{!-- Custom JS --}}
 <script src="/js/navbar.js"></script>
