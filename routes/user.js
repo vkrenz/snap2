@@ -13,7 +13,7 @@ const router = require('express').Router()
 // General Settings
 const fs = require('fs')
 const path = require('path')
-require('dotenv/config')
+// require('dotenv/config')
 
 // Mongo DB Settings
 const mongoose = require('mongoose')
