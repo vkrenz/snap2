@@ -16,9 +16,7 @@ const path = require('path')
 // require('dotenv/config')
 
 const checkAdmin = (req, res, next) => {
-    if(!req.session.isAdmin){
-        req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
-    }
+    req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
     console.log('[checkAdmin]:', req.session.isAdmin)
     next()
 }
@@ -418,7 +416,7 @@ router.get('/dash', (req, res) => {
 })
 
 router.get('/dash/:username', 
-checkAdmin, 
+checkAdmin,
 (req, res) => {
     // Do not allow random people onto your dash
     if(req.session.userLoggedIn) {

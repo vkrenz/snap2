@@ -1,9 +1,7 @@
 const router = require('express').Router()
 
 const checkAdmin = (req, res, next) => {
-    if(!req.session.isAdmin){
-        req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
-    }
+    req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
     console.log('[checkAdmin]:', req.session.isAdmin)
     next()
 }
@@ -73,7 +71,7 @@ Article.exists({articleID: 1}, (err, article) => {
 //     articleImgURL: "https://www.investopedia.com/thmb/wuuss_5lSKqGckNngtP1__7qEk4=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Blockchain_final-086b5b7b9ef74ecf9f20fe627dba1e34.png"
 // }).save()
 
-router.get('/',
+router.get('/', 
 checkAdmin,
 (req, res) =>{
     // Displays all articles 
@@ -94,7 +92,6 @@ checkAdmin,
             }))
             // Then
             if(req.session.userLoggedIn) {
-                console.log('[user admin]:', req.session.isAdmin)
                 res.render('articles', {
                     layout: false,
                     articles: articlesArr,

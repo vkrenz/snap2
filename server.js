@@ -16,7 +16,7 @@ const hbs = require('express-handlebars')
 const path = require('path')
 
 // Not important RN (for later use)
-// const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 // const cors = require('cors')
 
 // General app settings
@@ -31,11 +31,12 @@ const store = new MongoDBStore({
     uri: "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322",
     collection: "sessions"
 })
+app.use(cookieParser('senecacollege-web322'))
 app.use(session({
     secret: 'senecacollege-web322',
-    resave: true,
-    rolling: true,
-    saveUninitialized: true,
+    resave: true, // <== Save the session to store even if it hasn't changed
+    rolling: false, // <== Reset cookie maxAge on every request
+    saveUninitialized: false, // <== Don't create a session for anonymous users
     store: store,
     cookie: {
         secure: false,
