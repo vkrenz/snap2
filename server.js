@@ -27,12 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Express Session Settings
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session);
-
 const store = new MongoDBStore({
     uri: "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322",
     collection: "sessions"
 })
-
 app.use(session({
     secret: 'senecacollege-web322',
     resave: true,
@@ -41,7 +39,7 @@ app.use(session({
     store: store,
     cookie: {
         secure: false,
-        maxAge: 1000 * 60 * 60 * 24 * 7 // <== 1 Week
+        maxAge: 5 * 60000 // <== 5 Minutes
     }
 }))
 
@@ -111,4 +109,4 @@ app.listen(PORT, function (err) {
       return console.error(err)
     }
     console.log(`[${date}] Connected on localhost:${PORT}`)
-  })
+})

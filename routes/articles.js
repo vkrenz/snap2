@@ -1,5 +1,13 @@
 const router = require('express').Router()
 
+const checkAdmin = (req, res, next) => {
+    if(!req.session.isAdmin){
+        req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
+    }
+    console.log('[checkAdmin]:', req.session.isAdmin)
+    next()
+}
+
 // Mongo DB Settings
 const mongoose = require('mongoose')
 const url = "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322"
@@ -65,7 +73,9 @@ Article.exists({articleID: 1}, (err, article) => {
 //     articleImgURL: "https://www.investopedia.com/thmb/wuuss_5lSKqGckNngtP1__7qEk4=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Blockchain_final-086b5b7b9ef74ecf9f20fe627dba1e34.png"
 // }).save()
 
-router.get('/', (req, res) =>{
+router.get('/',
+checkAdmin,
+(req, res) =>{
     // Displays all articles 
     // Convert Articles obj ==> Array
     var articlesArr = []

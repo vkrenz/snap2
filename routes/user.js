@@ -15,6 +15,14 @@ const fs = require('fs')
 const path = require('path')
 // require('dotenv/config')
 
+const checkAdmin = (req, res, next) => {
+    if(!req.session.isAdmin){
+        req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
+    }
+    console.log('[checkAdmin]:', req.session.isAdmin)
+    next()
+}
+
 // Mongo DB Settings
 const mongoose = require('mongoose')
 const url = "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322"
@@ -357,7 +365,6 @@ router.post('/auth/login', loginValidationRules, (req, res) => {
                     req.session.userLoggedIn = true
                     // Pass user data to req.session
                     req.session.user = user
-                    req.session.isAdmin = user.userType == 'admin' ? true : false
                     res.redirect(`/user/dash/${username}`)
                 }else{
                     console.log('Password doesn\'t match :(')
@@ -410,7 +417,9 @@ router.get('/dash', (req, res) => {
     }
 })
 
-router.get('/dash/:username', (req, res) => {
+router.get('/dash/:username', 
+checkAdmin, 
+(req, res) => {
     // Do not allow random people onto your dash
     if(req.session.userLoggedIn) {
         const username = req.params.username
