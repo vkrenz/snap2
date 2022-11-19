@@ -15,11 +15,11 @@ const fs = require('fs')
 const path = require('path')
 // require('dotenv/config')
 
-const checkAdmin = (req, res, next) => {
-    req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
-    console.log('[checkAdmin]:', req.session.isAdmin)
-    next()
-}
+// const checkAdmin = (req, res, next) => {
+//     req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
+//     console.log('[checkAdmin]:', req.session.isAdmin)
+//     next()
+// }
 
 // Mongo DB Settings
 const mongoose = require('mongoose')
@@ -363,6 +363,7 @@ router.post('/auth/login', loginValidationRules, (req, res) => {
                     req.session.userLoggedIn = true
                     // Pass user data to req.session
                     req.session.user = user
+                    req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
                     res.redirect(`/user/dash/${username}`)
                 }else{
                     console.log('Password doesn\'t match :(')
@@ -416,7 +417,7 @@ router.get('/dash', (req, res) => {
 })
 
 router.get('/dash/:username', 
-checkAdmin,
+// checkAdmin,
 (req, res) => {
     // Do not allow random people onto your dash
     if(req.session.userLoggedIn) {

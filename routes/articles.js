@@ -1,10 +1,10 @@
 const router = require('express').Router()
 
-const checkAdmin = (req, res, next) => {
-    req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
-    console.log('[checkAdmin]:', req.session.isAdmin)
-    next()
-}
+// const checkAdmin = (req, res, next) => {
+//     req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
+//     console.log('[checkAdmin]:', req.session.isAdmin)
+//     next()
+// }
 
 // Mongo DB Settings
 const mongoose = require('mongoose')
@@ -72,7 +72,7 @@ Article.exists({articleID: 1}, (err, article) => {
 // }).save()
 
 router.get('/', 
-checkAdmin,
+// checkAdmin,
 (req, res) =>{
     // Displays all articles 
     // Convert Articles obj ==> Array
