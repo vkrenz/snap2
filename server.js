@@ -14,6 +14,7 @@ const app = express()
 // General Imports
 const hbs = require('express-handlebars')
 const path = require('path')
+const msg = require('./routes/user')
 
 // Not important RN (for later use)
 const cookieParser = require('cookie-parser')
@@ -89,7 +90,21 @@ app.get('/home', (req, res) => {
         })
     }else{
         console.log("User is not logged in")
-        res.render('index', { layout: false })
+        res.render('index', {
+            layout: false,
+        })
+    }
+})
+
+app.get('/home/logged-out', (req, res) => {
+    const msg = 'Logged Out Successfully'
+    if(req.session.userLoggedIn) {
+        res.redirect('/home')
+    }else{
+        res.render('index', {
+            layout: false,
+            msg: msg
+        })
     }
 })
 

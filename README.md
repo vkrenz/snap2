@@ -66,5 +66,6 @@ Change Log
 11/17/22 - Implemented a register 'Upload Image' (Multer)
 11/18/22 - Added a "Successfully Logged Out > Return to Home" Page
 11/18/22 - Articles now show "remove" and "add (+)" for admin users
+11/19/22 - "Logged Out Successfully" message after logged out
 ```
 

@@ -14,6 +14,7 @@ const router = require('express').Router()
 const fs = require('fs')
 const path = require('path')
 // require('dotenv/config')
+var msg;
 
 // const checkAdmin = (req, res, next) => {
 //     req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
@@ -318,6 +319,7 @@ router.get('/login/:username', (req, res) => {
 })
 
 router.get('/auth/logout', (req, res) => {
+    req.session.msg = ''
     if(req.session) {
         req.session.destroy(err => {
             if(err) {
@@ -325,7 +327,7 @@ router.get('/auth/logout', (req, res) => {
             }
         })
     }
-    res.render('logout', {layout: false})
+    res.redirect(`/home/logged-out`)
 })
 
 /**
@@ -472,4 +474,4 @@ router.get('/dash/:username',
     }
 })
 
-module.exports = router, mongooseConnection
+module.exports = router, mongooseConnection, msg

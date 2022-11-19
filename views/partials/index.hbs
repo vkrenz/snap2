@@ -95,6 +95,12 @@
 {{!-- Header Start --}}
 <div class="background parallax" id="gradient-background">
     <div class="header-cont container d-flex justify-content-center align-items-center flex-column">
+        {{#if msg}}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{msg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {{/if}}
         <h1 class="display-6">Web Hosting. <em>Effortlessly</em>.</h1>
         <a href="#plans" class="cta btn-hover gradient mt-5 shadow-lg text-decoration-none">See Our Plans</a>
         <span class="text-light mt-4">Starting at only <strong>$3.89/mo.</strong></span>
