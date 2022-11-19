@@ -319,14 +319,8 @@ router.get('/auth/logout', (req, res) => {
             }
         })
     }
-    //Then...
-    res.redirect('/user/auth/logout?status=success')
-})
-
-router.get('/auth/logout?status=success', (req, res) => {
-    console.log("Logged Out")
     res.render('logout', {layout: false})
-}) 
+})
 
 /**
  * @function ROUTER-POST-LOGIN
@@ -444,7 +438,6 @@ router.get('/dash/:username', (req, res) => {
                         if(req.session.user.username == username) {
                             // Only show the logged in user their dashboard.
                             var fullLocation
-
                             res.render('dash', { 
                                 layout: false ,
                                 username: user.username,

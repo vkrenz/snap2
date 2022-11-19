@@ -23,7 +23,7 @@ Todo
 ==>   Logout link (under user dropdown) will logout user and redirect to /home ✅
 ==>   Cannot go to /user/login it will redirect to /user/dash/:username ✅
 ---------------------------------
-==> Articles filter by categories
+==> Articles filter by categories <== Next
 ---------------------------------
 ==> Allow `isAdmin` user to:
 ==>   Add/remove articles
@@ -32,6 +32,7 @@ Todo
 ==>     Article image can only be an image
 ==>     Such as (.jpg, .jpeg, .png, .gif)
 ==> Admin user will display 'Admin' on user dashboard ✅
+==> Articles page with show "add" and "remove" for admin users ✅
 --------------------------------
 ==> Logged in user to be able to change:
 ==>   Username, fullname, profile picture (user/dash/edit)
@@ -40,7 +41,7 @@ Todo
 ==> Forgot password (for now just ask user 2+2)...
 ==>   Then promt the user to update their password.
 --------------------------------
-==> Implement 'Remember-me"
+==> Implement 'Remember-me" <== Not important
 --------------------------------
 ==> Implement a register 'Upload Image' (Multer) ✅
 ==> Be able to store and retreive it from mongo ✅
@@ -62,7 +63,8 @@ Change Log
 11/15/22 - Index now shows logged in user info on navbar
 11/15/22 - Added control buttons to index carousel
 11/17/22 - Cannot go to /user/login it will redirect to /user/dash/:username
-11/17/22 - Implement a register 'Upload Image' (Multer)
-
+11/17/22 - Implemented a register 'Upload Image' (Multer)
+11/18/22 - Added a "Successfully Logged Out > Return to Home" Page
+11/18/22 - Articles now show "remove" and "add (+)" for admin users
 ```
 

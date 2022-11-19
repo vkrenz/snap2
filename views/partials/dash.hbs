@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snap! | {{username}}'s Dashboard</title>
+    {{!-- JQuery CDN --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {{!-- Bootstrap CDN --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     {{!-- Font Awesome CDN --}}
@@ -12,6 +14,13 @@
     {{!-- Custom CSS --}}
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/dash.css">
+    {{!-- Bootstrap Tooltip JS --}}
+    <script type='text/javascript'>
+    // JQuery
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </head>
 <body>
 
@@ -74,57 +83,54 @@
                 <div class="py-2 px-5 rounded d-flex flex-column align-items-center shadow-lg" id="info-container">
                     <div class="info text-center">
                         <div class="name-container container-fluid d-flex justify-content-center mb-3">
-                            <div class="col-auto text-center px-1">
-                                <a href="/user/{{username}}/edit-profile"><i class="fa-solid fa-user-pen" style="cursor: pointer;"></i></a>                     </div>
-                            <div class="col-auto text-center px-1">
-                                <h5 class="text-dark font-weight-light">{{fullName}}</h5>
-                            </div>
+                            <h5 class="text-dark font-weight-light">{{fullName}}</h5>
                             <div class="col-auto text-center px-1">
                                 <p class="text-muted font-weight-light">(@{{username}})</p>
                             </div>
+                            <div class="col-auto text-center px-1"><a href="/user/{{username}}/edit-profile"><i class="fa-solid fa-user-pen" style="cursor: pointer;"></i></a></div>                     
                             {{#if isAdmin}}
-                                &middot;
                                 <div class="col-auto text-center px-1 d-inline-block">
-                                    <p class="text-light bg-danger px-1 rounded-pill font-weight-light"><i class="fa-solid fa-screwdriver-wrench mx-1"></i><strong class="me-1">Admin</strong></p>
+                                    {{!-- &middot; --}}
+                                    <i class="fa-solid fa-screwdriver-wrench mx-1" style="color: #d9534f" data-toggle="tooltip" title="Admin User"></i>
                                 </div>
                             {{/if}}
                         </div>
-                        <hr />
-                        <div class="d-flex flex-column flex-md-row align-items-center mb-4">
-                            <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                <i class="fa-solid fa-envelope me-3"></i><p class="text-muted">{{email}}</p>
-                            </div>
-                            {{#if phoneNumber}}
-                                <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                    <i class="fa-solid fa-phone me-3"></i><p class="text-muted">{{phoneNumber}}</p>
-                                </div>
-                            {{/if}}
-                            <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                <i class="fa-solid fa-building me-3"></i><p class="text-muted">{{companyName}}</p>
-                            </div>
-                            {{#unless fullLocation}}
-                                {{#if city}}
-                                    <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                        <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}</p>
-                                    </div>
-                                {{/if}}
-                                {{#if country}}
-                                    <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                        <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{country}}</p>
-                                    </div>
-                                {{/if}}
-                                {{#if postalCode}}
-                                    <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                        <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{postalCode}}</p>
-                                    </div>
-                                {{/if}}
-                            {{/unless}}
-                            {{#if fullLocation}}
-                                <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                    <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}, {{country}} {{postalCode}}</p>
-                                </div>
-                            {{/if}}
+                    <hr />
+                    </div>
+                    <div class="d-flex flex-column flex-md-row align-items-center mb-4">
+                        <div class="col-auto px-3 py-3 d-flex align-items-center">
+                            <i class="fa-solid fa-envelope me-3"></i><p class="text-muted">{{email}}</p>
                         </div>
+                        {{#if phoneNumber}}
+                            <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                <i class="fa-solid fa-phone me-3"></i><p class="text-muted">{{phoneNumber}}</p>
+                            </div>
+                        {{/if}}
+                        <div class="col-auto px-3 py-3 d-flex align-items-center">
+                            <i class="fa-solid fa-building me-3"></i><p class="text-muted">{{companyName}}</p>
+                        </div>
+                        {{#unless fullLocation}}
+                            {{#if city}}
+                                <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                    <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}</p>
+                                </div>
+                            {{/if}}
+                            {{#if country}}
+                                <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                    <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{country}}</p>
+                                </div>
+                            {{/if}}
+                            {{#if postalCode}}
+                                <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                    <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{postalCode}}</p>
+                                </div>
+                            {{/if}}
+                        {{/unless}}
+                        {{#if fullLocation}}
+                            <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}, {{country}} {{postalCode}}</p>
+                            </div>
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -176,10 +182,10 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 {{!-- Popper JS --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-{{!-- JQuery CDN --}}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 {{!-- Bootstrap JS CDN --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+{{!-- <script src="bootstrap/js/bootstrap-alert.js"></script>
+<script src="bootstrap/js/bootstrap-modal.js"></script> --}}
 
 </body>
 </html>

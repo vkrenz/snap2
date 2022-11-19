@@ -84,10 +84,12 @@ router.get('/', (req, res) =>{
             }))
             // Then
             if(req.session.userLoggedIn) {
+                console.log('[user admin]:', req.session.isAdmin)
                 res.render('articles', {
                     layout: false,
                     articles: articlesArr,
-                    username: req.session.user.username
+                    username: req.session.user.username,
+                    isAdmin: req.session.isAdmin
                 })
             }else{
                 res.render('articles', {
@@ -121,7 +123,7 @@ router.get('/read/:articleID', (req, res) =>{
                     author: article.author,
                     rating: stars,
                     content: article.content,
-                    username: req.session.user.username
+                    username: req.session.user.username,
                 })
             }else{
                 res.render('read', {
