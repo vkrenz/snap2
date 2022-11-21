@@ -77,31 +77,41 @@ const User = mongoose.model("users", new mongoose.Schema({
     })
 )
 
-User.exists({username: "admin-vkrenzel"}, (err, user) => {
-    if(err) {
-        console.log(err)
-    } else {
-        console.log('[Exists] Admin User:', user)
-        if(!user) {
-            // Create admin user
-            console.log("Admin User not found! Creating one...")
-            const adminUser = new User({
-                userType: "admin",
-                username: "admin-vkrenzel",
-                email: "admin@senecacollege.ca",
-                password: "admin",
-                fullName: "Victor Krenzel",
-                phoneNumber: "1112223333",
-                companyName: "Seneca College",
-                country: "Canada",
-                city: "Toronto",
-                postalCode: "M2M 1G1"
-            }).save().then(() => {
-                console.log("Admin User Created!")
-            })
-        }
-    }
-})
+// User.exists({username: "admin-vkrenzel"}, (err, user) => {
+//     if(err) {
+//         console.log(err)
+//     } else {
+//         console.log('[Exists] Admin User:', user)
+//         if(!user) {
+//             // Create admin user
+//             console.log("Admin User not found! Creating one...")
+//             const adminUser = new User({
+//                 userType: "admin",
+//                 username: "admin-vkrenzel",
+//                 email: "admin@senecacollege.ca",
+//                 password: "admin",
+//                 fullName: "Victor Krenzel",
+//                 phoneNumber: "1112223333",
+//                 companyName: "Seneca College",
+//                 country: "Canada",
+//                 city: "Toronto",
+//                 postalCode: "M2M 1G1"
+//             }).save().then(() => {
+//                 console.log("Admin User Created!")
+//             })
+//         }
+//     }
+// })
+
+// Delete all users
+// DO NOT UNCOMMENT!!
+// User.deleteMany({}, (err, users) => {
+//     if(err) {
+//         console.log(err)
+//     }else{
+//         console.log("All users have been deleted!")
+//     }
+// })
 
 // Express Validator
 const { check, validationResult } = require('express-validator')
@@ -144,7 +154,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         console.log('[File]:', file)
-        cb(null, Date.now() + path.extname(file.originalname))
+        cb(null, `${Date.now()}-${file.fieldname}${path.extname(file.originalname)}`)
     }
 })
 const upload = multer({storage: storage})
@@ -217,11 +227,11 @@ registerValidationRules,
                             email: email,
                             password: password,
                             fullName: fullName,
-                            phoneNumber: phoneNumber ? null : phoneNumber,
+                            phoneNumber: phoneNumber == undefined ? null : phoneNumber,
                             companyName: companyName,
-                            country: country ? null : country,
-                            city: city ? null : city,
-                            postalCode: postalCode ? null : city
+                            country: country == undefined ? null : country,
+                            city: city == undefined ? null : city,
+                            postalCode: postalCode == undefined ? null : postalCode
                         }).save().then(() => {
                             console.log(`New User (${username})`)
                         }).catch(err => {
@@ -233,18 +243,22 @@ registerValidationRules,
                             email: email,
                             password: password,
                             fullName: fullName,
-                            phoneNumber: phoneNumber ? null : phoneNumber,
+                            phoneNumber: phoneNumber == undefined ? null : phoneNumber,
                             companyName: companyName,
-                            country: country ? null : country,
-                            city: city ? null : city,
-                            postalCode: postalCode ? null : city
+                            country: country == undefined ? null : country,
+                            city: city == undefined ? null : city,
+                            postalCode: postalCode == undefined ? null : postalCode
                         }
-                        // Pass user data to req.session
-                        req.session.user = newUser
                         // Log user in
                         req.session.userLoggedIn = true
+                        // Log new user created
+                        console.log('[New User Created (newUser)]:', newUser)
+                        // Pass user data to req.session
+                        req.session.user = newUser
+                        req.session.username = username
                         // Redirect to the dashboard
-                        res.redirect(`/user/dash/${req.session.user.username}`)
+                        console.log('[Redirect]:', `/user/dash/${username}`)
+                        res.redirect(`/user/dash/${username}`)
                     }
                 }
             })
@@ -445,23 +459,28 @@ router.get('/dash/:username',
                         res.redirect('/user/login')
                     }else{
                         // If the /:user exists then...
-                        if(req.session.user.username == username) {
+                        if(req.session.username == username) {
                             // Only show the logged in user their dashboard.
-                            var fullLocation
-                            res.render('dash', { 
-                                layout: false ,
-                                username: user.username,
-                                email: user.email,
-                                fullName: user.fullName,
-                                profilePhoto: user.profilePhoto,
-                                phoneNumber: user.phoneNumber,
-                                companyName: user.companyName,
-                                country: user.country,
-                                city: user.city,
-                                postalCode: user.postalCode,
-                                isAdmin: req.session.isAdmin,
-                                fullLocation: fullLocation
-                            })
+                            if(user.username != undefined && user.username != null) {
+                                var fullLocation
+                                res.render('dash', { 
+                                    layout: false ,
+                                    username: user.username,
+                                    email: user.email,
+                                    fullName: user.fullName,
+                                    profilePhoto: user.profilePhoto,
+                                    phoneNumber: user.phoneNumber,
+                                    companyName: user.companyName,
+                                    country: user.country,
+                                    city: user.city,
+                                    postalCode: user.postalCode,
+                                    isAdmin: req.session.isAdmin,
+                                    fullLocation: fullLocation
+                                })
+                            }else{
+                                console.log('[Dash]:', req.session.userLoggedIn, req.session.username)
+                                // res.redirect('/login')
+                            }
                         }else{
                             res.redirect(`/user/dash/${req.session.user.username}`)
                         }

@@ -67,5 +67,6 @@ Change Log
 11/18/22 - Added a "Successfully Logged Out > Return to Home" Page
 11/18/22 - Articles now show "remove" and "add (+)" for admin users
 11/19/22 - "Logged Out Successfully" message after logged out
+11/20/22 - Added "Edit/Remove" buttons for articles page (admin only access)
 ```
 

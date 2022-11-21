@@ -76,9 +76,6 @@
                         <img src="/img/defaultProfilePhoto.png" alt="{{username}}'s profile photo">
                     {{/if}}
                 </div>
-                    <div class="col-auto text-center px-1 position-absolute edit-profile">
-                        <a href="/user/{{username}}/edit-profile" data-toggle="tooltip" title="Edit Profile" style="cursor: pointer;"><i class="fa-solid fa-sliders fa-lg"></i></a>
-                    </div> 
             </div>
         </div>
         <div class="col d-flex align-items-center" id="bottom-panel">
@@ -91,11 +88,15 @@
                                 <p class="text-muted font-weight-light">(@{{username}})</p>
                             </div>                    
                             {{#if isAdmin}}
-                                <div class="col-auto text-center px-1 d-inline-block" data-toggle="tooltip" title="Admin Privileges: Enabled ✅">
+                                <div class="col-auto text-center px-1 d-inline-block" data-toggle="tooltip" title="Admin Privileges ✅">
                                     &middot;
                                     <i class="fa-solid fa-screwdriver-wrench fa-lg mx-1" style="color: #d9534f"></i>
                                 </div>
                             {{/if}}
+                            <div class="col-auto text-center px-1 d-inline-block">
+                                &middot;
+                                <a href="/user/{{username}}/edit-profile" data-toggle="tooltip" title="Edit Profile" style="cursor: pointer;"><i class="fa-solid fa-sliders fa-lg mx-1"></i></a>
+                            </div> 
                         </div>
                     <hr />
                     </div>
