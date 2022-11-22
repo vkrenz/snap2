@@ -113,16 +113,18 @@
                             <i class="fa-solid fa-building me-3"></i><p class="text-muted">{{companyName}}</p>
                         </div>
                         {{#unless fullLocation}}
-                            {{#if city}}
-                                <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                    <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}</p>
-                                </div>
-                            {{/if}}
-                            {{#if country}}
-                                <div class="col-auto px-3 py-3 d-flex align-items-center">
-                                    <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{country}}</p>
-                                </div>
-                            {{/if}}
+                            {{#unless countryCity}}
+                                {{#if city}}
+                                    <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                        <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}</p>
+                                    </div>
+                                {{/if}}
+                                {{#if country}}
+                                    <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                        <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{country}}</p>
+                                    </div>
+                                {{/if}}
+                            {{/unless}}
                             {{#if postalCode}}
                                 <div class="col-auto px-3 py-3 d-flex align-items-center">
                                     <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{postalCode}}</p>
@@ -132,6 +134,11 @@
                         {{#if fullLocation}}
                             <div class="col-auto px-3 py-3 d-flex align-items-center">
                                 <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}, {{country}} {{postalCode}}</p>
+                            </div>
+                        {{/if}}
+                        {{#if countryCity}}
+                            <div class="col-auto px-3 py-3 d-flex align-items-center">
+                                <i class="fa-solid fa-thumbtack me-3"></i><p class="text-muted">{{city}}, {{country}}</p>
                             </div>
                         {{/if}}
                     </div>

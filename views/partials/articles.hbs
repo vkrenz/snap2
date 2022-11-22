@@ -99,51 +99,62 @@
 <div class="articles container">
     <div class="container d-flex justify-content-center align-items-center">
         <h1 class="text-muted display-6 text-center">Articles</h1>
-        {{#if isAdmin}}
-            <i class="fa-solid fa-plus fa-xl text-muted px-2"></i>
-        {{/if}}
+        {{!-- {{#if isAdmin}}
+            <div class="d-inline-block p-2 border rounded-cirlce mx-4 rounded-circle shadow-lg add-article-btn">
+                <a href="/articles/add-article"><i class="fa-solid fa-plus fa-xl text-muted"></i></a>
+            </div>
+        {{/if}} --}}
     </div>
     <hr />
     <div class="row">
         {{#if isAdmin}}
             {{#each articles}}
-            <div class="col-sm-12 col-md-4 col-lg-3 d-flex align-items-stretch">
-                <div class="card my-4 mx-auto" style="width: 18rem;">
-                    <img class="card-img-top" src="{{articleImgURL}}" alt="Card image cap">
-                    <div class="card-body d-flex flex-column content-start justify-content-around">
-                        <h5 class="card-title" style="
-                        display: -webkit-box;
-                        overflow: hidden;
-                        -webkit-line-clamp: 2;
-                        -webkit-box-orient: vertical;
-                        ">
-                        {{this.name}}
-                        </h5>
-                        <small class="text-muted">{{this.author}}</small>
-                        <br>
-                        <span style="
-                        display: -webkit-box;
-                        overflow: hidden;
-                        -webkit-line-clamp: 3;
-                        -webkit-box-orient: vertical;
-                        ">
-                            {{this.content}}
-                        </span>    
-                        <a href="/articles/read/{{this.articleID}}" class="btn btn-primary w-100 mt-4">Read More</a>
-                        <p class="text-center mt-3">
-                            <a href="/articles/edit-article/{{this.articleID}}" class="text-decoration-none">Edit Article</a>
-                             | 
-                            <a href="/articles/remove-article/{{this.articleID}}" class="text-danger text-center text-decoration-none">Remove</a>
-                        </p>
+                <div class="col-sm-12 col-md-4 col-lg-3 d-flex align-items-stretch">
+                    <div class="card my-4 mx-auto shadow-lg" style="width: 18rem;">
+                        <img class="card-img-top" src="{{articleImgURL}}" alt="Card image cap">
+                        <div class="card-body d-flex flex-column content-start justify-content-around">
+                            <h5 class="card-title" style="
+                            display: -webkit-box;
+                            overflow: hidden;
+                            -webkit-line-clamp: 2;
+                            -webkit-box-orient: vertical;
+                            ">
+                            {{this.name}}
+                            </h5>
+                            <small class="text-muted">{{this.author}}</small>
+                            <br>
+                            <span style="
+                            display: -webkit-box;
+                            overflow: hidden;
+                            -webkit-line-clamp: 3;
+                            -webkit-box-orient: vertical;
+                            ">
+                                {{this.content}}
+                            </span>    
+                            <a href="/articles/read/{{this.articleID}}" class="btn btn-primary w-100 mt-4">Read More</a>
+                            <p class="text-center mt-4">
+                                <a href="/articles/edit-article/{{this.articleID}}" class="text-decoration-none mx-2">Edit Article</a>
+                                &middot;
+                                <a href="/articles/remove-article/{{this.articleID}}" class="text-danger text-center text-decoration-none mx-2">Remove</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
             {{/each}}
+                <div class="col-sm-12 col-md-4 col-lg-3 d-flex align-items-stretch">
+                    <div class="card my-4 mx-auto shadow-lg add-article-card" style="width: 18rem;">
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="d-inline-block p-2 border rounded-cirlce mx-4 rounded-circle shadow-lg add-article-btn">
+                                <a href="/articles/add-article"><i class="fa-solid fa-plus fa-xl text-muted"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         {{/if}}
         {{#unless isAdmin}}
             {{#each articles}}
                 <div class="col-sm-12 col-md-4 col-lg-3 d-flex align-items-stretch">
-                    <div class="card my-4 mx-auto" style="width: 18rem;">
+                    <div class="card my-4 mx-auto shadow-lg" style="width: 18rem;">
                         <img class="card-img-top" src="{{articleImgURL}}" alt="Card image cap">
                         <div class="card-body d-flex flex-column content-start justify-content-around">
                             <h5 class="card-title" style="

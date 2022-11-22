@@ -212,13 +212,15 @@ registerValidationRules,
                         renderRegisterPageErr(res, Err, err, username, email, password, confirm_password, fullName, phoneNumber, companyName, country, city, postalCode)        
                     }else{
                         console.log(`${username} does not exist. Creating new user...`)
-                        const profilePhoto = {
+                        const File = req.file ? true : false
+                        const profilePhoto = File ? 
+                        {
                             data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
                             contentType: 'image/png'
-                        }
+                        } : undefined
                         // Create a new user in web322.users
                         new User({
-                            profilePhoto: `/upload/${req.file.filename}`,
+                            profilePhoto: profilePhoto == undefined ? '' : `/upload/${req.file.filename}`,
                             // coverPhoto: {
                             //     data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
                             //     contentType: 'image/png'
@@ -379,6 +381,7 @@ router.post('/auth/login', loginValidationRules, (req, res) => {
                     req.session.userLoggedIn = true
                     // Pass user data to req.session
                     req.session.user = user
+                    req.session.username = user.username
                     req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
                     res.redirect(`/user/dash/${username}`)
                 }else{
@@ -462,7 +465,8 @@ router.get('/dash/:username',
                         if(req.session.username == username) {
                             // Only show the logged in user their dashboard.
                             if(user.username != undefined && user.username != null) {
-                                var fullLocation
+                                const fullLocation = user.country && user.city && user.postalCode ? true : false
+                                const countryCity = user.country && user.city && !user.postalCode ? true : false
                                 res.render('dash', { 
                                     layout: false ,
                                     username: user.username,
@@ -475,7 +479,8 @@ router.get('/dash/:username',
                                     city: user.city,
                                     postalCode: user.postalCode,
                                     isAdmin: req.session.isAdmin,
-                                    fullLocation: fullLocation
+                                    fullLocation: fullLocation,
+                                    countryCity: countryCity
                                 })
                             }else{
                                 console.log('[Dash]:', req.session.userLoggedIn, req.session.username)
@@ -489,6 +494,35 @@ router.get('/dash/:username',
             }
         })
     }else{
+        console.log('[Dash]: Redirected back to /login')
+        res.redirect('/user/login')
+    }
+})
+
+router.get('/:username/edit-profile', (req, res) => {
+    if(req.session.userLoggedIn) {
+        const username = req.params.username
+        User.exists({username: username}, (err, user) => {
+            if(err) {
+                console.log(err)
+                res.redirect('/user/login')             
+            }else{
+                User.findOne({username: username}, (err, user) => {
+                    if(err) {
+                        console.log(err)
+                        res.redirect('/user/login')
+                    }else{
+                        if(req.session.username == username) {
+                            res.render('edit-profile', {
+                                layout: false
+                            })
+                        }  
+                    }
+                })
+            }
+        })
+    }else{
+        console.log('[Edit-Profile]: Redirected back to /login')
         res.redirect('/user/login')
     }
 })
