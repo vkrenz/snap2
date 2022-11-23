@@ -133,23 +133,33 @@
                             </span>    
                             <a href="/articles/read/{{this.articleID}}" class="btn btn-primary w-100 mt-4">Read More</a>
                             <p class="text-center mt-4">
-                                <a href="/articles/edit-article/{{this.articleID}}" class="text-decoration-none mx-2">Edit Article</a>
+                                <a href="/articles/edit-article/{{this.articleID}}" class="text-decoration-none mx-2"><i class="fa-solid fa-pencil me-2"></i>Edit Article</a>
                                 &middot;
-                                <a href="/articles/remove-article/{{this.articleID}}" class="text-danger text-center text-decoration-none mx-2">Remove</a>
+                                {{!-- Modal Trigger! --}}
+                                <button type="button" class="btn btn-danger rounded-pill mx-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-trash-can me-2"></i>Remove</button>
                             </p>
+                    </div>
+                </div>
+                {{!-- Modal --}}
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete this article?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you would like to delete this article? This action cannot be undone.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a href="/articles/remove-article?id={{this.articleID}}"><button type="button" class="btn btn-danger" id="delete-btn">Yes, delete this article!</button></a>
+                        </div>
                         </div>
                     </div>
                 </div>
+            </div>
             {{/each}}
-                <div class="col-sm-12 col-md-4 col-lg-3 d-flex align-items-stretch">
-                    <div class="card my-4 mx-auto shadow-lg add-article-card" style="width: 18rem;">
-                        <div class="card-body d-flex justify-content-center align-items-center">
-                            <div class="d-inline-block p-2 border rounded-cirlce mx-4 rounded-circle shadow-lg add-article-btn">
-                                <a href="/articles/add-article"><i class="fa-solid fa-plus fa-xl text-muted"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
         {{/if}}
         {{#unless isAdmin}}
             {{#each articles}}

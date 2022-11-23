@@ -146,4 +146,7 @@ router.get('/read/:articleID', (req, res) =>{
     }) 
 })
 
+router.get('/remove-article?id=:articleID', (req, res) =>{
+})
+
 module.exports = router

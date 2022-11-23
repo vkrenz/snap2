@@ -41,7 +41,7 @@ app.use(session({
     store: store,
     cookie: {
         secure: false,
-        maxAge: 5 * 60000 // <== 5 Minutes
+        maxAge: 60 * 60000 // <== 1 Hour
     }
 }))
 
