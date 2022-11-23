@@ -69,5 +69,7 @@ Change Log
 11/19/22 - "Logged Out Successfully" message after logged out
 11/20/22 - Added "Edit/Remove" buttons for articles page (admin only access)
 11/21/22 - Added a blank article card with a "+" to add article (admin)
+11/22/22 - Removed blank article card (to be replaced with just a normal + next to "articles")
+11/22/22 - Added a modal to remove-articles (not working yet)
 ```
 
