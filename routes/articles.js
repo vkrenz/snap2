@@ -146,7 +146,69 @@ router.get('/read/:articleID', (req, res) =>{
     }) 
 })
 
+router.get('/edit-article?id=:articleID', (req, res) =>{
+    const articleID = req.params.articleID
+    // Confirm with user
+    Article.findOne({articleID: articleID}, (err, article) =>{
+        if(err) {
+            console.log(err)
+        }else{
+            res.render('edit-article', {
+                layout: false,
+                name: article.name,
+                author: article.author,
+                rating: article.rating,
+                content: article.content
+            })
+        }
+    })
+})
+
+router.post('/edit-article?id=:articleID', (req, res) =>{
+    const articleID = req.params.articleID
+    const { name, author, rating, content } = req.body
+    const filter = { articleID: articleID }
+    const update = {
+        name: name,
+        author: author,
+        rating: rating,
+        content: content
+    }
+    let updatedArticle = Article.findOneAndUpdate(filter, update, {
+        new: true
+    })
+    console.log(`
+        [updatedArticle]: {
+            updatedName: ${updatedArticle.name},
+            updatedAuthor: ${updatedArticle.author},
+            updatedRating: ${updatedArticle.rating},
+            updatedContent: ${updatedArticle.content}
+        }
+    `)
+})
+
+
 router.get('/remove-article?id=:articleID', (req, res) =>{
+    const articleID = req.params.articleID
+    // Confirm with user
+    res.render('remove-article', {
+        layout: false
+    })
+    // If user says "yes i'm sure... please delete article"
+    res.redirect(`/remove-article?id=${articleID}&remove=true`)
+})
+
+router.get('/remove-article?id=:articleID&remove=true', (req, res) =>{
+    const articleID = req.params.articleID
+    // Remove articleID
+    Article.removeOne({articleID: articleID}, (err, article) => {
+        if(err) {
+            console.log(err)
+        }else{
+            console.log('Article ID#' + articleID, 'has been removed successfully. Redirecting back to /articles.')
+            res.redirect('/')
+        }
+    })
 })
 
 module.exports = router
