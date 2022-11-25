@@ -116,9 +116,9 @@ router.get('/read', (req, res) =>{
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const path = path.join(__dirname, '..', 'public', 'tmp')
-        fse.mkdirSync(path)
-        cb(null, path)
+        const PATH = path.join(__dirname, '..', 'public', 'tmp')
+        fse.mkdirSync(PATH)
+        cb(null, PATH)
     },
     filename: (req, file, cb) => {
         console.log('[File]:', file)
