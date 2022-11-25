@@ -186,7 +186,7 @@ registerValidationRules,
                         new User({
                             profilePhoto: profilePhoto == undefined ? '' : `/tmp/${req.file.filename}`,
                             // coverPhoto: {
-                            //     data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                            //     data: fs.readFileSync(path.join(__dirname + '/upload/' + req.file.filename)),
                             //     contentType: 'image/png'
                             // },
                             username: username,

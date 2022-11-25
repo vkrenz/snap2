@@ -157,7 +157,7 @@ if(submit) {
     } : undefined
     const filter = { articleID: id }
     const update = {
-        articlePhoto: articlePhoto == undefined ? console.log('Article photo wasn\'t updated!') : `/articlePhoto/${req.file.filename}`,
+        articlePhoto: articlePhoto == undefined ? console.log('Article photo wasn\'t updated!') : `/tmp/${req.file.filename}`,
         name: name,
         author: author,
         rating: rating,
