@@ -48,7 +48,9 @@ app.use(session({
 // Parser settings
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000 }))
+app.use(bodyParser.json({limit: '50mb'}))
+
 
 // User Router Import
 const user = require('./routes/user')
