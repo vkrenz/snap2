@@ -3,18 +3,21 @@ const router = require('express').Router()
 // General settings
 const fs = require('fs')
 const path = require('path')
+const { v4: uuidv4 } = require('uuid')
 
 // Mongo DB Settings
 const mongoose = require('mongoose')
 const url = "mongodb+srv://dbVkrenzel:QnzXuxUfGkRec92j@senecaweb.53svswz.mongodb.net/web322"
 mongoose.connect(url)
-const defaultArticleImgURL = "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
+// const defaultArticleImgURL = "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
 // MongoDB - Define Article Schema
 const Article = mongoose.model("articles", new mongoose.Schema({
     "articlePhoto": String,
     "articleID": {
-        "type": Number,
-        "unique": true
+        "type": String,
+        "required": true,
+        "default": () => uuidv4(),
+        "index": { unique: true }
     },
     "name": String,
     "date": {
@@ -33,9 +36,6 @@ const Article = mongoose.model("articles", new mongoose.Schema({
     "content": String
     })
 )
-
-// Ensure a unique articleID
-var articlesCount = 0
 
 router.get('/', (req, res) =>{
     const alert = req.query.alert
@@ -73,9 +73,9 @@ router.get('/', (req, res) =>{
     })  
 })
 
-router.get('/read/:articleID', (req, res) =>{
-    const articleID = parseInt(req.params.articleID)
-    Article.findOne({articleID: articleID}, (err, article) => {
+router.get('/read', (req, res) =>{
+    const id = req.query.id
+    Article.findOne({articleID: id}, (err, article) => {
         if(err) {
             console.log(err)
         }else{
@@ -134,7 +134,6 @@ router.get('/edit-article', (req, res) =>{
             res.render('edit-article', {
                 layout: false,
                 id: article.articleID,
-                url: article.articleImgURL,
                 name: article.name,
                 author: article.author,
                 rating: article.rating,
@@ -158,12 +157,13 @@ if(submit) {
     } : undefined
     const filter = { articleID: id }
     const update = {
-        articlePhoto: articlePhoto == undefined ? '' : `/articlePhoto/${req.file.filename}`,
+        articlePhoto: articlePhoto == undefined ? console.log('Article photo wasn\'t updated!') : `/articlePhoto/${req.file.filename}`,
         name: name,
         author: author,
         rating: rating,
         content: content
     }
+    console.log(articlePhoto)
     Article.findOneAndUpdate(filter, update, (err, article) => {
         if(err) {
             console.log(err)
@@ -186,10 +186,8 @@ upload.single('articlePhoto'),
         data: fs.readFileSync(path.join(__dirname, '..', 'public', 'articlePhoto', req.file.filename)),
         contentType: 'image/png'
     } : undefined
-    articlesCount += 1
     new Article({
         articlePhoto: articlePhoto == undefined ? '' : `/articlePhoto/${req.file.filename}`,
-        articleID: articlesCount + 1,
         name: name,
         author: author,
         rating: rating,
@@ -199,7 +197,7 @@ upload.single('articlePhoto'),
     }).catch(err => {
         console.log(`Error: ${err}`)
     })
-    const alert = `Article ${articlesCount + 1} created successfully`
+    const alert = `Article created successfully`
     res.redirect(`/articles?alert=${alert}`)
 })
 
