@@ -115,7 +115,7 @@ router.get('/read', (req, res) =>{
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const PATH = path.join(__dirname, '..', 'public', 'tmp')
+        const PATH = path.join(__dirname, '..', 'public', 'article')
         cb(null, PATH)
     },
     filename: (req, file, cb) => {
@@ -153,13 +153,13 @@ if(submit) {
     const File = req.file ? true : false
     const articlePhoto = File ? 
     {
-        // data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', req.file.filename)),
-        data: fs.readFileSync(path.join('tmp', req.file.filename)),
+        // data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
+        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
         contentType: 'image/png'
     } : undefined
     const filter = { articleID: id }
     const update = {
-        articlePhoto: articlePhoto == undefined ? console.log('Article photo wasn\'t updated!') : `/tmp/${req.file.filename}`,
+        articlePhoto: articlePhoto == undefined ? console.log('Article photo wasn\'t updated!') : `/upload/${req.file.filename}`,
         name: name,
         author: author,
         rating: rating,
@@ -185,11 +185,11 @@ upload.single('articlePhoto'),
     const File = req.file ? true : false
     const articlePhoto = File ? 
     {
-        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', req.file.filename)),
+        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
         contentType: 'image/png'
     } : undefined
     new Article({
-        articlePhoto: articlePhoto == undefined ? '' : `/tmp/${req.file.filename}`,
+        articlePhoto: articlePhoto == undefined ? '' : `/upload/${req.file.filename}`,
         name: name,
         author: author,
         rating: rating,
