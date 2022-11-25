@@ -152,7 +152,8 @@ if(submit) {
     const File = req.file ? true : false
     const articlePhoto = File ? 
     {
-        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', req.file.filename)),
+        // data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', req.file.filename)),
+        data: fs.readFileSync(path.join('tmp', req.file.filename)),
         contentType: 'image/png'
     } : undefined
     const filter = { articleID: id }
