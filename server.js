@@ -49,7 +49,7 @@ app.use(session({
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 // fixing "413 Request Entity Too Large" errors
-app.use(express.json({limit: "10mb", extended: false}))
+app.use(express.json({limit: "10mb", extended: true}))
 app.use(express.urlencoded({limit: "10mb", extended: true, parameterLimit: 50000}))
 
 
