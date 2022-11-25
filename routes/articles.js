@@ -1,10 +1,8 @@
 const router = require('express').Router()
 
-// const checkAdmin = (req, res, next) => {
-//     req.session.isAdmin = req.session.user.userType == 'admin' ? true : false
-//     console.log('[checkAdmin]:', req.session.isAdmin)
-//     next()
-// }
+// General settings
+const fs = require('fs')
+const path = require('path')
 
 // Mongo DB Settings
 const mongoose = require('mongoose')
@@ -13,10 +11,7 @@ mongoose.connect(url)
 const defaultArticleImgURL = "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
 // MongoDB - Define Article Schema
 const Article = mongoose.model("articles", new mongoose.Schema({
-    "articleImgURL": {
-        "type": String,
-        "default": defaultArticleImgURL
-    },
+    "articlePhoto": String,
     "articleID": {
         "type": Number,
         "unique": true
@@ -39,43 +34,11 @@ const Article = mongoose.model("articles", new mongoose.Schema({
     })
 )
 
-// Create a test article
-Article.exists({articleID: 1}, (err, article) => {
-    if(err) {
-        console.log(err)
-    }else{
-        console.log('[Exists] Test Article:', article)
-        if(!article) {
-            console.log("Test Article not found! Creating one...")
-            const testArticle = new Article({
-                articleID: 1,
-                name: "This Is A Test Article! Read Now!",
-                author: "Victor Krenzel",
-                authorEmail: "vkrenzel@myseneca.ca",
-                rating: 5,
-                content: 'This is some test content...'
-            }).save().then(() => {
-                console.log("Test Article Created!")
-            })
-        }
-    }
-})
+// Ensure a unique articleID
+var articlesCount = 0
 
-// new Article({
-//     articleID: 4,
-//     name: "Blockchain Facts: What Is It, How It Works, and How It Can Be Used",
-//     author: "ADAM HAYES",
-//     authorEmail: null,
-//     rating: 4,
-//     content: "What Is a Blockchain?A blockchain is a distributed database or ledger that is shared among the nodes of a computer network. As a database, a blockchain stores information electronically in digital format. Blockchains are best known for their crucial role in cryptocurrency systems, such as Bitcoin, for maintaining a secure and decentralized record of transactions. The innovation with a blockchain is that it guarantees the fidelity and security of a record of data and generates trust without the need for a trusted third party.<br>One key difference between a typical database and a blockchain is how the data is structured. A blockchain collects information together in groups, known as blocks, that hold sets of information. Blocks have certain storage capacities and, when filled, are closed and linked to the previously filled block, forming a chain of data known as the blockchain. All new information that follows that freshly added block is compiled into a newly formed block that will then also be added to the chain once filled.<br>A database usually structures its data into tables, whereas a blockchain, as its name implies, structures its data into chunks (blocks) that are strung together. This data structure inherently makes an irreversible timeline of data when implemented in a decentralized nature. When a block is filled, it is set in stone and becomes a part of this timeline. Each block in the chain is given an exact timestamp when it is added to the chain.",
-//     articleImgURL: "https://www.investopedia.com/thmb/wuuss_5lSKqGckNngtP1__7qEk4=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Blockchain_final-086b5b7b9ef74ecf9f20fe627dba1e34.png"
-// }).save()
-
-router.get('/', 
-// checkAdmin,
-(req, res) =>{
-    // Displays all articles 
-    // Convert Articles obj ==> Array
+router.get('/', (req, res) =>{
+    const alert = req.query.alert
     var articlesArr = []
     Article.find({/** All Articles */}, (err, articles) => {
         if(err) {
@@ -88,7 +51,7 @@ router.get('/',
                 authorEmail: article.authorEmail,
                 rating: article.rating,
                 content: article.content,
-                articleImgURL: article.articleImgURL
+                articlePhoto: article.articlePhoto
             }))
             // Then
             if(req.session.userLoggedIn) {
@@ -96,12 +59,14 @@ router.get('/',
                     layout: false,
                     articles: articlesArr,
                     username: req.session.user.username,
-                    isAdmin: req.session.isAdmin
+                    isAdmin: req.session.isAdmin,
+                    alert: alert ? alert : undefined
                 })
             }else{
                 res.render('articles', {
                     layout: false,
-                    articles: articlesArr
+                    articles: articlesArr,
+                    alert: alert ? alert : undefined     
                 })    
             }
         }
@@ -146,15 +111,30 @@ router.get('/read/:articleID', (req, res) =>{
     }) 
 })
 
-router.get('/edit-article?id=:articleID', (req, res) =>{
-    const articleID = req.params.articleID
+// Multer Settings 
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '..', 'public', 'articlePhoto'))
+    },
+    filename: (req, file, cb) => {
+        console.log('[File]:', file)
+        cb(null, `${Date.now()}-${file.fieldname}${path.extname(file.originalname)}`)
+    }
+})
+const upload = multer({storage: storage})
+
+router.get('/edit-article', (req, res) =>{
+    const id = req.query.id      
     // Confirm with user
-    Article.findOne({articleID: articleID}, (err, article) =>{
+    Article.findOne({articleID: id}, (err, article) =>{
         if(err) {
             console.log(err)
         }else{
             res.render('edit-article', {
                 layout: false,
+                id: article.articleID,
+                url: article.articleImgURL,
                 name: article.name,
                 author: article.author,
                 rating: article.rating,
@@ -164,51 +144,86 @@ router.get('/edit-article?id=:articleID', (req, res) =>{
     })
 })
 
-router.post('/edit-article?id=:articleID', (req, res) =>{
-    const articleID = req.params.articleID
-    const { name, author, rating, content } = req.body
-    const filter = { articleID: articleID }
+router.post('/edit-article', 
+upload.single('articlePhoto'),
+(req, res) => {
+const { id, submit } = req.query
+if(submit) {
+    const { url, name, author, rating, content } = req.body
+    const File = req.file ? true : false
+    const articlePhoto = File ? 
+    {
+        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'articlePhoto', req.file.filename)),
+        contentType: 'image/png'
+    } : undefined
+    const filter = { articleID: id }
     const update = {
+        articlePhoto: articlePhoto == undefined ? '' : `/articlePhoto/${req.file.filename}`,
         name: name,
         author: author,
         rating: rating,
         content: content
     }
-    let updatedArticle = Article.findOneAndUpdate(filter, update, {
-        new: true
-    })
-    console.log(`
-        [updatedArticle]: {
-            updatedName: ${updatedArticle.name},
-            updatedAuthor: ${updatedArticle.author},
-            updatedRating: ${updatedArticle.rating},
-            updatedContent: ${updatedArticle.content}
-        }
-    `)
-})
-
-
-router.get('/remove-article?id=:articleID', (req, res) =>{
-    const articleID = req.params.articleID
-    // Confirm with user
-    res.render('remove-article', {
-        layout: false
-    })
-    // If user says "yes i'm sure... please delete article"
-    res.redirect(`/remove-article?id=${articleID}&remove=true`)
-})
-
-router.get('/remove-article?id=:articleID&remove=true', (req, res) =>{
-    const articleID = req.params.articleID
-    // Remove articleID
-    Article.removeOne({articleID: articleID}, (err, article) => {
+    Article.findOneAndUpdate(filter, update, (err, article) => {
         if(err) {
             console.log(err)
         }else{
-            console.log('Article ID#' + articleID, 'has been removed successfully. Redirecting back to /articles.')
-            res.redirect('/')
+            console.log(article.name, article.author, article.rating)
+            const alert = 'Updated article successfully'
+            res.redirect(`/articles?alert=${alert}`)
         }
     })
+}
+})
+
+router.post('/add-article', 
+upload.single('articlePhoto'),
+(req, res) => {
+    const { name, author, rating, content } = req.body
+    const File = req.file ? true : false
+    const articlePhoto = File ? 
+    {
+        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'articlePhoto', req.file.filename)),
+        contentType: 'image/png'
+    } : undefined
+    articlesCount += 1
+    new Article({
+        articlePhoto: articlePhoto == undefined ? '' : `/articlePhoto/${req.file.filename}`,
+        articleID: articlesCount + 1,
+        name: name,
+        author: author,
+        rating: rating,
+        content: content
+    }).save().then(() => {
+        console.log('New article created')
+    }).catch(err => {
+        console.log(`Error: ${err}`)
+    })
+    const alert = `Article ${articlesCount + 1} created successfully`
+    res.redirect(`/articles?alert=${alert}`)
+})
+
+router.get('/remove-article', (req, res) =>{
+    const id = req.query.id
+    const remove = req.query.remove ? true : false
+    console.log(id, remove)
+    if(remove) {
+        Article.deleteOne({articleID: id}, (err, article) => {
+            if(err) {
+                console.log(err)
+            }else{
+                console.log('Article ID#' + id, 'has been removed successfully. Redirecting back to /articles.')
+                const alert = `Article ${id} has been successfully removed`
+                res.redirect(`/articles?alert=${alert}`)
+            }
+        })
+    }else{
+        // Confirm with user
+        res.render('remove-article', {
+            layout: false,
+            id: id
+        })
+    }
 })
 
 module.exports = router

@@ -114,23 +114,6 @@ body {
     transition: 0.2s all ease-in;
 }
 
-.navbar-crop {
-    width: 25px;
-    height: 25px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.navbar-crop img {
-    width: 25px;
-    height: auto;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 /** Override Bootstrap @media */
 @media only screen and (max-width: 992px) {
     .nav-link,

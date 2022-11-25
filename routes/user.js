@@ -77,42 +77,6 @@ const User = mongoose.model("users", new mongoose.Schema({
     })
 )
 
-// User.exists({username: "admin-vkrenzel"}, (err, user) => {
-//     if(err) {
-//         console.log(err)
-//     } else {
-//         console.log('[Exists] Admin User:', user)
-//         if(!user) {
-//             // Create admin user
-//             console.log("Admin User not found! Creating one...")
-//             const adminUser = new User({
-//                 userType: "admin",
-//                 username: "admin-vkrenzel",
-//                 email: "admin@senecacollege.ca",
-//                 password: "admin",
-//                 fullName: "Victor Krenzel",
-//                 phoneNumber: "1112223333",
-//                 companyName: "Seneca College",
-//                 country: "Canada",
-//                 city: "Toronto",
-//                 postalCode: "M2M 1G1"
-//             }).save().then(() => {
-//                 console.log("Admin User Created!")
-//             })
-//         }
-//     }
-// })
-
-// Delete all users
-// DO NOT UNCOMMENT!!
-// User.deleteMany({}, (err, users) => {
-//     if(err) {
-//         console.log(err)
-//     }else{
-//         console.log("All users have been deleted!")
-//     }
-// })
-
 // Express Validator
 const { check, validationResult } = require('express-validator')
 

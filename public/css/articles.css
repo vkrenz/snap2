@@ -4,15 +4,6 @@
     object-fit: cover;
 }
 
-.add-article-btn:hover {
-    background-color: gray;
-}
-
-.add-article-card {
-    height: 487px;
-    border: none;
-}
-
 @media only screen and (max-width: 576px) {
     .card-img-top {
         height: 45vw;
