@@ -114,7 +114,7 @@ router.get('/register/:username', (req, res) => {
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..', 'public', 'upload'))
+        cb(null, path.join(__dirname, '..', 'public', 'tmp'))
     },
     filename: (req, file, cb) => {
         console.log('[File]:', file)
@@ -179,12 +179,12 @@ registerValidationRules,
                         const File = req.file ? true : false
                         const profilePhoto = File ? 
                         {
-                            data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
+                            data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', req.file.filename)),
                             contentType: 'image/png'
                         } : undefined
                         // Create a new user in web322.users
                         new User({
-                            profilePhoto: profilePhoto == undefined ? '' : `/upload/${req.file.filename}`,
+                            profilePhoto: profilePhoto == undefined ? '' : `/tmp/${req.file.filename}`,
                             // coverPhoto: {
                             //     data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
                             //     contentType: 'image/png'

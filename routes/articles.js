@@ -115,7 +115,7 @@ router.get('/read', (req, res) =>{
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..', 'public', 'articlePhoto'))
+        cb(null, path.join(__dirname, '..', 'public', 'tmp'))
     },
     filename: (req, file, cb) => {
         console.log('[File]:', file)
@@ -152,7 +152,7 @@ if(submit) {
     const File = req.file ? true : false
     const articlePhoto = File ? 
     {
-        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'articlePhoto', req.file.filename)),
+        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', req.file.filename)),
         contentType: 'image/png'
     } : undefined
     const filter = { articleID: id }
@@ -183,11 +183,11 @@ upload.single('articlePhoto'),
     const File = req.file ? true : false
     const articlePhoto = File ? 
     {
-        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'articlePhoto', req.file.filename)),
+        data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', req.file.filename)),
         contentType: 'image/png'
     } : undefined
     new Article({
-        articlePhoto: articlePhoto == undefined ? '' : `/articlePhoto/${req.file.filename}`,
+        articlePhoto: articlePhoto == undefined ? '' : `/tmp/${req.file.filename}`,
         name: name,
         author: author,
         rating: rating,
