@@ -71,5 +71,7 @@ Change Log
 11/21/22 - Added a blank article card with a "+" to add article (admin)
 11/22/22 - Removed blank article card (to be replaced with just a normal + next to "articles")
 11/22/22 - Added a modal to remove-articles (not working yet)
+11/24/22 - Assignment 5 Done!
+11/24/22 - Admin can now add/remove/edit articles and upload only images for articlePhoto
 ```
 
