@@ -48,8 +48,9 @@ app.use(session({
 // Parser settings
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000 }))
-app.use(bodyParser.json({limit: '50mb'}))
+// fixing "413 Request Entity Too Large" errors
+app.use(express.json({limit: "10mb", extended: false}))
+app.use(express.urlencoded({limit: "10mb", extended: true, parameterLimit: 50000}))
 
 
 // User Router Import
