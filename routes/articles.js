@@ -2,6 +2,7 @@ const router = require('express').Router()
 
 // General settings
 const fs = require('fs')
+const fse = require('fs-extra')
 const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 
@@ -115,7 +116,9 @@ router.get('/read', (req, res) =>{
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..', 'public', 'tmp'))
+        const path = path.join(__dirname, '..', 'public', 'tmp')
+        fse.mkdirSync(path)
+        cb(null, path)
     },
     filename: (req, file, cb) => {
         console.log('[File]:', file)
