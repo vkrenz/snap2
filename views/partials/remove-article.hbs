@@ -96,14 +96,15 @@
     </nav>
     {{!-- Navbar End --}}
 {{/if}}
-<div class="container-fluid remove-article-cont">
-    <form class="w-25 mx-auto">
+<div class="container-fluid remove-article-cont d-flex justify-content-center">
+    <form class="d-inline-block mx-auto">
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">Danger</h4>
             <p>Are you sure you would like to delete this article?</p>
             <hr>
             <p class="mb-0">This action cannot be undone!</p>
-            <a class="btn btn-primary mt-3" href="/articles/remove-article?id={{id}}&remove=true">Yes, I'm sure</a>
+            <a class="btn btn-secondary mt-3 me-3 w-100" href="/articles">No, take me back!</button>
+            <a class="btn btn-danger mt-3 w-100" href="/articles/remove-article?id={{id}}&remove=true">Yes, I'm sure</a>
         </div>
     </form>
 </div>
