@@ -114,7 +114,8 @@ router.get('/register/:username', (req, res) => {
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..', 'public', 'upload'))
+        const PATH = path.join(__dirname, '..', 'public', 'upload')
+        cb(null, PATH)
     },
     filename: (req, file, cb) => {
         console.log('[File]:', file)
@@ -458,7 +459,7 @@ router.get('/dash/:username',
             }
         })
     }else{
-        console.log('[Dash]: Redirected back to /login')
+        console.log('[Dash]: Redirected back to /login, UserLoggedIn:', req.session.userLoggedIn)
         res.redirect('/user/login')
     }
 })

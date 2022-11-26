@@ -37,6 +37,20 @@ const Article = mongoose.model("articles", new mongoose.Schema({
     })
 )
 
+// Multer Settings 
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const PATH = path.join(__dirname, '..', 'public', 'upload')
+        cb(null, PATH)
+    },
+    filename: (req, file, cb) => {
+        console.log('[File]:', file)
+        cb(null, `${Date.now()}-${file.fieldname}${path.extname(file.originalname)}`)
+    }
+})
+const upload = multer({storage: storage})
+
 router.get('/', (req, res) =>{
     const alert = req.query.alert
     var articlesArr = []
@@ -111,20 +125,6 @@ router.get('/read', (req, res) =>{
     }) 
 })
 
-// Multer Settings 
-const multer = require('multer')
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const PATH = path.join(__dirname, '..', 'public', 'upload')
-        cb(null, PATH)
-    },
-    filename: (req, file, cb) => {
-        console.log('[File]:', file)
-        cb(null, `${Date.now()}-${file.fieldname}${path.extname(file.originalname)}`)
-    }
-})
-const upload = multer({storage: storage})
-
 router.get('/edit-article', (req, res) =>{
     const id = req.query.id      
     // Confirm with user
@@ -153,7 +153,6 @@ if(submit) {
     const File = req.file ? true : false
     const articlePhoto = File ? 
     {
-        // data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
         data: fs.readFileSync(path.join(__dirname, '..', 'public', 'upload', req.file.filename)),
         contentType: 'image/png'
     } : undefined
@@ -177,6 +176,7 @@ if(submit) {
     })
 }
 })
+
 
 router.post('/add-article', 
 upload.single('articlePhoto'),
