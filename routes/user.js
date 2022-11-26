@@ -80,6 +80,20 @@ const User = mongoose.model("users", new mongoose.Schema({
 // Express Validator
 const { check, validationResult } = require('express-validator')
 
+// Multer Settings 
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const PATH = path.join(__dirname, '..', 'public', 'upload')
+        cb(null, PATH)
+    },
+    filename: (req, file, cb) => {
+        console.log('[File]:', file)
+        cb(null, `${Date.now()}-${file.fieldname}${path.extname(file.originalname)}`)
+    }
+})
+const upload = multer({storage: storage})
+
 router.get('/', (req, res) => {
     if(req.session.userLoggedIn) {
         res.redirect(`/user/dash/${req.session.user.username}`)
@@ -109,20 +123,6 @@ router.get('/register/:username', (req, res) => {
  * ==> Creates a new user in mongoDB collection 'Users_Test',
  * ==> Redirects to user dashboard @see /user/dash/:username
  */
-
-// Multer Settings 
-const multer = require('multer')
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const PATH = path.join(__dirname, '..', 'public', 'upload')
-        cb(null, PATH)
-    },
-    filename: (req, file, cb) => {
-        console.log('[File]:', file)
-        cb(null, `${Date.now()}-${file.fieldname}${path.extname(file.originalname)}`)
-    }
-})
-const upload = multer({storage: storage})
 
 const registerValidationRules = [
     check('username')
