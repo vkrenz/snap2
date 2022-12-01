@@ -84,7 +84,7 @@ const { check, validationResult } = require('express-validator')
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const PATH = path.join(__dirname, '..', 'public', 'tmp', 'upload')
+        const PATH = path.join(__dirname, '..', 'tmp', 'upload')
         cb(null, PATH)
     },
     filename: (req, file, cb) => {
@@ -180,12 +180,12 @@ registerValidationRules,
                         const File = req.file ? true : false
                         const profilePhoto = File ? 
                         {
-                            data: fs.readFileSync(path.join(__dirname, '..', 'public', 'tmp', 'upload', req.file.filename)),
+                            data: fs.readFileSync(path.join(__dirname, '..', 'tmp', 'upload', req.file.filename)),
                             contentType: 'image/png'
                         } : undefined
                         // Create a new user in web322.users
                         new User({
-                            profilePhoto: profilePhoto == undefined ? '' : `/tmp/upload/${req.file.filename}`,
+                            profilePhoto: profilePhoto == undefined ? '' : `/tmp/${req.file.filename}`,
                             // coverPhoto: {
                             //     data: fs.readFileSync(path.join(__dirname + '/upload/' + req.file.filename)),
                             //     contentType: 'image/png'
