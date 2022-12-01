@@ -217,15 +217,17 @@ registerValidationRules,
                             postalCode: postalCode == undefined ? null : postalCode
                         }
                         // Log user in
-                        req.session.userLoggedIn = true
+                        // req.session.userLoggedIn = true
                         // Log new user created
                         console.log('[New User Created (newUser)]:', newUser)
                         // Pass user data to req.session
                         req.session.user = newUser
                         req.session.username = username
-                        // Redirect to the dashboard
-                        console.log('[Redirect]:', `/user/dash/${username}`)
-                        res.redirect(`/user/dash/${username}`)
+                        // Redirect back to login
+                        const alert = `User has been successfully registered`
+                        console.log('[Redirect]:', `/user/login?alert=${alert}`)
+                        res.redirect(`/user/login?alert=${alert}`)
+                        // res.redirect(`/user/dash/${username}`)
                     }
                 }
             })
@@ -274,7 +276,8 @@ router.get('/login', (req, res) => {
     if(req.session.userLoggedIn) {
         res.redirect(`/user/dash/${req.session.user.username}`)
     }else{
-        var error = req.query.error
+        const error = req.query.error
+        const alert = req.query.alert
         if(error) {
             if(error == 1) {
                 res.render('login', {
@@ -285,6 +288,7 @@ router.get('/login', (req, res) => {
         }else{
             res.render('login', {
                 layout: false,
+                alert: alert ? alert : console.log('No Alerts')
             })       
         }
     }
