@@ -73,5 +73,7 @@ Change Log
 11/22/22 - Added a modal to remove-articles (not working yet)
 11/24/22 - Assignment 5 Done!
 11/24/22 - Admin can now add/remove/edit articles and upload only images for articlePhoto
+
+git push
 ```
 
